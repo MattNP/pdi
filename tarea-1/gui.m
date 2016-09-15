@@ -60,13 +60,13 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
-%Mostramos el wallpaper en el axis principal
-axes(handles.axes1) %Nos posicionamos en el axis1
-handles.imagen=imread('baile.jpeg'); %Leemos la imagen baile.jpeg
-imagesc(handles.imagen)    %La mostramos en el axis1
-axis off %Quitamos los ejes
+% %Mostramos el wallpaper en el axis principal
+% axes(handles.axes1) %Nos posicionamos en el axis1
+% handles.imagen=imread('baile.jpeg'); %Leemos la imagen baile.jpeg
+% imagesc(handles.imagen)    %La mostramos en el axis1
+% axis off %Quitamos los ejes
 
-% imagen = imread('baile.jpeg');
+imagen = imread('baile.jpeg');
 % sectors = imread('sectors.png');
 % a = resize(imagen,[640 480]);
 % b = resize(sectors,[640 480]);
@@ -91,6 +91,32 @@ preview(vid,hImage);
 
 %Ocultamos el text7
  set(handles.text7,'visible','off');
+ 
+ 
+axes(handles.axes1)
+handles.ax = gca;
+handles.ax.XColor = 'white';
+handles.ax.YColor = 'white';
+
+% for i = 1:100
+%       set(hObject,'BackgroundColor','white');  
+%     set(handles.axes1,'Color',[0 0 0]);
+%     pause(0.1);
+%     set(handles.axes1,'Color',[0 0 1]);
+%     pause(0.1);
+%     set(handles.axes1,'Color',[0 1 0]);
+%     pause(0.1);
+%     set(handles.axes1,'Color',[0 1 1]);
+%     pause(0.1);
+%     set(handles.axes1,'Color',[1 0 0]);
+%     pause(0.1);
+%     set(handles.axes1,'Color',[1 0 1]);
+%     pause(0.1);
+%     set(handles.axes1,'Color',[1 1 0]);
+%     pause(0.1);
+%     set(handles.axes1,'Color',[1 1 1]);
+%     pause(0.1);
+% end
 
 
 % UIWAIT makes gui wait for user response (see UIRESUME)
@@ -115,8 +141,50 @@ function start_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+%Cargamos los botones
+%b = imread('resources/blue.png');
+r = imread('resources/red.png');
+y = imread('resources/yellow.png');
+g = imread('resources/green.png');
 
-%Enviamos valor a la etiqueta de estado
+
+%Dibujamos un circulo en el Axes 6
+axes(handles.axes6);
+theta = linspace(0, 2*pi);
+x=1+0.5*cos(theta);
+y=2+0.5*sin(theta);
+plot(x,y);
+fill(x,y,'b');      %Función para rellenar la b indica blue
+axis equal
+set(gca,'XTickLabel',[]);
+set(gca,'YTickLabel',[]);
+axis off
+pause(1);
+
+%Pintamos el circulo de rojo
+fill(x,y,'r');
+axis equal
+set(gca,'XTickLabel',[]);
+set(gca,'YTickLabel',[]);
+axis off
+pause(1);
+
+%Pintamos el circulo de verde
+fill(x,y,'g');
+axis equal
+set(gca,'XTickLabel',[]);
+set(gca,'YTickLabel',[]);
+axis off
+pause(1);
+
+%Pintamos el circulo de Amarillo
+fill(x,y,'y');
+axis equal
+set(gca,'XTickLabel',[]);
+set(gca,'YTickLabel',[]);
+axis off
+
+
 set(handles.text8,'String','En juego');
 
 %Creamos un conteo regresivo desde 5
