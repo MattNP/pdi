@@ -62,7 +62,7 @@ guidata(hObject, handles);
 
 %Mostramos el wallpaper en el axis principal
 axes(handles.axes1) %Nos posicionamos en el axis1
-handles.imagen=imread('baileg.png'); %Leemos la imagen baile.jpeg
+handles.imagen=imread('baile.jpeg'); %Leemos la imagen baile.jpeg
 imagesc(handles.imagen)    %La mostramos en el axis1
 axis off %Quitamos los ejes
 
@@ -89,6 +89,10 @@ nBands = get(vid, 'NumberOfBands');
 hImage = image( zeros(imHeight, imWidth, nBands),'Parent',handles.axes2 );
 preview(vid,hImage);
 
+%Ocultamos el text7
+ set(handles.text7,'visible','off');
+
+
 % UIWAIT makes gui wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
@@ -104,20 +108,34 @@ function varargout = gui_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
+
 % --- Executes on button press in start.
 function start_Callback(hObject, eventdata, handles)
 % hObject    handle to start (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-axes(handles.axes1) %Nos posicionamos en el axis1
-handles.imagen=imread('baileg.png'); %Leemos la imagen baile.jpeg
-handles.imagen1=imread('baile.jpeg');
-for i = 1:5
-  pause(1);
-  
+
+
+%Enviamos valor a la etiqueta de estado
+set(handles.text8,'String','En juego');
+
+%Creamos un conteo regresivo desde 5
+set(handles.text7,'visible','on');  %hacemos visible text7
+for i = 5:-1: 0                     
+    set(handles.text7,'String',i);  %Enviamos el valor de i a la etiqueta
+   pause(1)
 end
+set(handles.text7,'visible','off'); %Ocultamos text7
+
+%Acomodamos la imagen con los puntos de los sensores
+axes(handles.axes1)
+handles.imagenag = imread('baileg.png');
+imagesc(handles.imagenag)
+axis off
+
+%Cargamos la canción a reproducir 
 cancion = audioread('twice.wav');
-sound(cancion,44100);
+sound(cancion,44100);               %Reproducimos la canción a una frecuencia de 44100Ghz
 
 % --- Executes on button press in restart.
 function restart_Callback(hObject, eventdata, handles)
@@ -141,3 +159,6 @@ function help_Callback(hObject, eventdata, handles)
 % hObject    handle to help (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% Callback del pushbutton de la primera ventana 
+helpGui; % abre la segunda ventana, no hay necesidad de escribir parámetros 
