@@ -50,8 +50,9 @@ imHeight = vidRes(2);
 nBands = vid.NumberOfBands;
 hImage = image( zeros(imHeight, imWidth, nBands) );
 
-% ESPECIFICAMOS LA POSICIÓN DE LA IMAGEN PARA QUE SE MUESTRE CORRECTSAMENTE
-% EN EL CENTRO
+% Specify the size of the axes that contains the image object
+% so that it displays the image at the right resolution and
+% centers it in the figure window.
 figSize = get(hFig,'Position');
 figWidth = figSize(3);
 figHeight = figSize(4);
@@ -60,10 +61,20 @@ gca.position = [ ((figWidth - imWidth)/2)...
                ((figHeight - imHeight)/2)...
                imWidth imHeight ];
 
-% CONFIGURAMOS LA FUNCION PARA HACER PROCESADO A LA IMAGEN DEL VIDEO
+% Set up the update preview window function.
 setappdata(hImage,'UpdatePreviewWindowFcn',@mypreview_fcn);
 
-% VISUALIZAMOS EL VIDEO
+% % Make handle to text label available to update function.
+% setappdata(hImage,'HandleToTimestampLabel',hTextLabel);
+
 preview(vid, hImage);
 
-close all;
+
+% [a] = SensorMov(x10,x11,y10,y11);
+% [b] = SensorMov(x20,x21,y20,y21);
+% [c] = SensorMov(x30,x31,y30,y31);
+% [d] = SensorMov(x40,x41,y40,y41);
+% [e] = SensorMov(x50,x51,y50,y51);
+% [f] = SensorMov(x60,x61,y60,y61);
+% close all;
+% figure(1); title(strcat('a = ', num2str(a)));
