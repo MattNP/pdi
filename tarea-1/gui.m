@@ -62,16 +62,32 @@ guidata(hObject, handles);
 
 %Mostramos el wallpaper en el axis principal
 axes(handles.axes1) %Nos posicionamos en el axis1
-handles.imagen=imread('baile.jpeg'); %Leemos la imagen baile.jpeg
+handles.imagen=imread('baileg.png'); %Leemos la imagen baile.jpeg
 imagesc(handles.imagen)    %La mostramos en el axis1
 axis off %Quitamos los ejes
 
+% imagen = imread('baile.jpeg');
+% sectors = imread('sectors.png');
+% a = resize(imagen,[640 480]);
+% b = resize(sectors,[640 480]);
+% bg = a*b;
+% figure(1);imshow(bg);
+
+%Cargamos la imagen base en el axis2
 axes(handles.axes2)
 handles.imagena2 = imread('sectors.png');
 imagesc(handles.imagena2)
 axis off
 
-
+%cargamos el video en el axis2
+vid = videoinput('winvideo',1,'YUY2_640x480');
+set(vid,'ReturnedColorSpace','rgb');
+vidRes = get(vid, 'VideoResolution');
+imWidth = vidRes(1);
+imHeight = vidRes(2);
+nBands = get(vid, 'NumberOfBands');
+hImage = image( zeros(imHeight, imWidth, nBands),'Parent',handles.axes2 );
+preview(vid,hImage);
 
 % UIWAIT makes gui wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -93,6 +109,15 @@ function start_Callback(hObject, eventdata, handles)
 % hObject    handle to start (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+axes(handles.axes1) %Nos posicionamos en el axis1
+handles.imagen=imread('baileg.png'); %Leemos la imagen baile.jpeg
+handles.imagen1=imread('baile.jpeg');
+for i = 1:5
+  pause(1);
+  
+end
+cancion = audioread('twice.wav');
+sound(cancion,44100);
 
 % --- Executes on button press in restart.
 function restart_Callback(hObject, eventdata, handles)
@@ -106,6 +131,9 @@ function close_Callback(hObject, eventdata, handles)
 % hObject    handle to close (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+clear all;
+close all;
+clc;
 
 
 % --- Executes on button press in help.
