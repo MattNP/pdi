@@ -24,7 +24,7 @@ function varargout = gui(varargin)
 
 % Edit the above text to modify the response to help gui
 
-% Last Modified by GUIDE v2.5 07-Sep-2016 23:40:31
+% Last Modified by GUIDE v2.5 14-Sep-2016 18:42:02
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -37,12 +37,12 @@ gui_State = struct('gui_Name',       mfilename, ...
 if nargin && ischar(varargin{1})
     gui_State.gui_Callback = str2func(varargin{1});
 end
-
 if nargout
     [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
 else
     gui_mainfcn(gui_State, varargin{:});
 end
+
 % End initialization code - DO NOT EDIT
 
 
@@ -60,6 +60,19 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
+%Mostramos el wallpaper en el axis principal
+axes(handles.axes1) %Nos posicionamos en el axis1
+handles.imagen=imread('baile.jpeg'); %Leemos la imagen baile.jpeg
+imagesc(handles.imagen)    %La mostramos en el axis1
+axis off %Quitamos los ejes
+
+axes(handles.axes2)
+handles.imagena2 = imread('sectors.png');
+imagesc(handles.imagena2)
+axis off
+
+
+
 % UIWAIT makes gui wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
@@ -75,29 +88,28 @@ function varargout = gui_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
-% --- Executes on button press in Start.
-function Start_Callback(hObject, eventdata, handles)
-% hObject    handle to Start (see GCBO)
+% --- Executes on button press in start.
+function start_Callback(hObject, eventdata, handles)
+% hObject    handle to start (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% --- Executes on button press in restart.
+function restart_Callback(hObject, eventdata, handles)
+% hObject    handle to restart (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
 
-% --- Executes on button press in pushbutton3.
-function pushbutton3_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton3 (see GCBO)
+% --- Executes on button press in close.
+function close_Callback(hObject, eventdata, handles)
+% hObject    handle to close (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
 
-% --- Executes on button press in pushbutton4.
-function pushbutton4_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton4 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --- Executes on button press in pushbutton5.
-function pushbutton5_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton5 (see GCBO)
+% --- Executes on button press in help.
+function help_Callback(hObject, eventdata, handles)
+% hObject    handle to help (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
