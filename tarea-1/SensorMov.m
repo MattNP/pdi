@@ -2,10 +2,10 @@ function [u,l,r,dd] = SensorMov(vid)
 % vid = videoinput('winvideo',1,'YUY2_640x480');
 
 % CREAMOS UNA FIGURA PARA MOSTRAR LA IMAGEN
-% hFig = figure('Toolbar','none',...
-%        'Menubar', 'none',...
-%        'NumberTitle','Off',...
-%        'Name','My Custom Preview GUI');
+hFig = figure('Toolbar','none',...
+       'Menubar', 'none',...
+       'NumberTitle','Off',...
+       'Name','My Custom Preview GUI');
 
 % CONFIGURAMOS LA ADQUISICIÓN DEL VIDEO
 vid = videoinput('winvideo',1,'YUY2_640x480');
@@ -22,16 +22,16 @@ hImage = image(zeros(imHeight, imWidth, nBands));
 
 % ESPECIFICAMOS LA POSICIÓN DE LA IMAGEN PARA QUE SE MUESTRE CORRECTSAMENTE
 % EN EL CENTRO
-% figSize = get(hFig,'Position');
-% figWidth = figSize(3);
-% figHeight = figSize(4);
-% gca.unit = 'pixels';
-% gca.position = [ ((figWidth - imWidth)/2)... 
-%                ((figHeight - imHeight)/2)...
-%                imWidth imHeight ];
+figSize = get(hFig,'Position');
+figWidth = figSize(3);
+figHeight = figSize(4);
+gca.unit = 'pixels';
+gca.position = [ ((figWidth - imWidth)/2)... 
+               ((figHeight - imHeight)/2)...
+               imWidth imHeight ];
 % 
 % setappdata(hImage,'UpdatePreviewWindowFcn',@flip_fcn);
-% preview(vid, hImage);
+preview(vid, hImage);
 
 up = [64,192;256,384];
 left = [192,320;64,192];
@@ -49,7 +49,7 @@ u=0;
 l=0;
 dd=0;
 r=0;
-for i = 1:5
+for i = 1:500
     a = flip(getsnapshot(vid),2);
     aN = double(rgb2gray(a))/255;
     bN = sectorsN .* aN;

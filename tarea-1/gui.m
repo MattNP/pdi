@@ -170,119 +170,186 @@ set(handles.axes9,'color','b');
 set(handles.axes10,'color','b');
 set(handles.axes11,'color','b');
 
+% vid = videoinput('winvideo',1,'YUY2_640x480');
+% set(vid,'ReturnedColorSpace','rgb');
+% vidRes = get(vid, 'VideoResolution');
+% imWidth = vidRes(1);
+% imHeight = vidRes(2);
+% nBands = get(vid, 'NumberOfBands');
+% hImage = image( zeros(imHeight, imWidth, nBands),'Parent',handles.axes2 );
+% preview(vid,hImage);
+% contador = 0;
+% set(vid,'ReturnedColorSpace','Grayscale');
+% up = [64,192;256,384];
+% left = [192,320;64,192];
+% right = [192,320;448,576];
+% down = [320,448;256,384];
 vid = videoinput('winvideo',1,'YUY2_640x480');
-set(vid,'ReturnedColorSpace','rgb');
+vid.FramesPerTrigger = 5;
+vid.TriggerRepeat = 4;
+vid.FramesAcquiredFcnCount = 5;
 vidRes = get(vid, 'VideoResolution');
 imWidth = vidRes(1);
 imHeight = vidRes(2);
 nBands = get(vid, 'NumberOfBands');
 hImage = image( zeros(imHeight, imWidth, nBands),'Parent',handles.axes2 );
 preview(vid,hImage);
-contador = 0;
-while(true)
-l=0;
+% 
+% x11=64; x12=192; y11=256; y12=384;
+% x21=192; x22=320; y21=64; y22=192;
+% x31=192; x32=320; y31=448; y32=576;
+% x41=320; x42=448; y41=256; y42=384;
+
+up = [64,192;256,384];
+left = [192,320;64,192];
+right = [192,320;448,576];
+down = [320,448;256,384];
+
+sectors = zeros(480,640,'uint8');
+sectors(up(1,1):up(1,2),up(2,1):up(2,2)) = 255;
+sectors(left(1,1):left(1,2),left(2,1):left(2,2)) = 255;
+sectors(right(1,1):right(1,2),right(2,1):right(2,2)) = 255;
+sectors(down(1,1):down(1,2),down(2,1):down(2,2)) = 255;
+sectorsN = double(sectors/255);
+
 u=0;
+l=0;
 dd=0;
 r=0;
-suma = [];
+contador = 0;
+while(true)
+ n = round(4*rand+1);
+ if n == 1
+     set(handles.axes6,'color','y');
+    for i = 1:2
+        a = flip(getsnapshot(vid),2);
+        aN = double(rgb2gray(a))/255;
+        bN = sectorsN .* aN;
+        b = uint8(255*bN);
+        c = flip(getsnapshot(vid),2);
+        cN = double(rgb2gray(c))/255;
+        dN = sectorsN .* cN;
+        d = uint8(255*dN);
 
-     n = round(4*rand+1);
-     if n == 1
-         set(handles.axes6,'color','y');
-         for i=1:5
-             a = getsnapshot(vid);
-             a1 = rgb2gray(a);
-             c = a1(192:320,64:192);
-             b = getsnapshot(vid);
-             b1 = rgb2gray(b);
-             d = b1(192:320,64:192);
-             e = c-d;
-             suma =[suma, sum(e(:))];
-             figure(1);plot(suma)
-            
-         end
-            if suma ~= 0
-                disp('left')
-                l=1;
-            end
-         if (l==1)
-             contador = contador + 2;
-         else
-             contador = contador - 2;
-         end
-     elseif n == 2
-         set(handles.axes9,'color','g');
-         for i=1:5
-              a = getsnapshot(vid);
-             a1 = rgb2gray(a);
-             c = a1(192:320,64:192);
-             b = getsnapshot(vid);
-             b1 = rgb2gray(b);
-             d = b1(192:320,64:192);
-             e = c-d;
-             suma =[suma, sum(e(:))];
-             figure(1);plot(suma)
-         end
-            if suma ~= 0
-                disp('up')
-                u=1;
-            end
-         if (u==1)
-             contador = contador + 2;
-         else
-             contador = contador - 2;
-         end
-     elseif n == 3
-         set(handles.axes10,'color','r'); 
-         for i=1:5
-             a = getsnapshot(vid);
-             a1 = rgb2gray(a);
-             c = a1(192:320,64:192);
-             b = getsnapshot(vid);
-             b1 = rgb2gray(b);
-             d = b1(192:320,64:192);
-             e = c-d;
-             suma =[suma, sum(e(:))];
-             figure(1);plot(suma)
-         end
-            if suma ~= 0
-                disp('down')
-                dd=1;
-            end
-         if (dd==1)
-             contador = contador + 2;
-         else
-             contador = contador - 2;
-         end
-     elseif n == 4
-         set(handles.axes11,'color','b');
-          for i=1:5
-             a = getsnapshot(vid);
-             a1 = rgb2gray(a);
-             c = a1(192:320,64:192);
-             b = getsnapshot(vid);
-             b1 = rgb2gray(b);
-             d = b1(192:320,64:192);
-             e = c-d;
-             suma =[suma, sum(e(:))];
-             figure(1);plot(suma)
-         end
-            if suma ~= 0
-                disp('up')
-                r=1;
-            end
-         if (r==1)
-             contador = contador + 2;
-         else
-             contador = contador - 2;
-         end
-     end
-     set(handles.text6,'String',num2str(contador));
-    pause(1);
-    set(handles.axes6,'color','k');
-    set(handles.axes9,'color','k');
-    set(handles.axes10,'color','k');
-    set(handles.axes11,'color','k');
+        e = b-d;
+
+        eLeft = e(left(1,1):left(1,2),left(2,1):left(2,2));
+        maxELeft = max(eLeft(:));
+
+        maxValue = 50;
+
+        if maxELeft > maxValue
+             disp('left')
+            l=1;
+        end
+         pause(0.5)
+    end
+
+        if (l == 1)
+            contador = contador + 2;
+        else
+            contador = contador - 2;
+        end
+ elseif n == 2
+     set(handles.axes9,'color','g');
+     for i = 1:2
+        a = flip(getsnapshot(vid),2);
+        aN = double(rgb2gray(a))/255;
+        bN = sectorsN .* aN;
+        b = uint8(255*bN);
+        c = flip(getsnapshot(vid),2);
+        cN = double(rgb2gray(c))/255;
+        dN = sectorsN .* cN;
+        d = uint8(255*dN);
+
+        e = b-d;
+
+        eUp = e(up(1,1):up(1,2),up(2,1):up(2,2));
+        maxEUp = max(eUp(:));
+
+        maxValue = 50;
+
+        if maxEUp > maxValue
+              disp('up');
+            u=1;
+        end
+         pause(0.5)
+    end
+        if (u == 1)
+            disp('up')
+            contador = contador + 2;
+        else
+            contador = contador - 2;
+        end
+ elseif n == 3
+     set(handles.axes10,'color','r'); 
+     for i = 1:2
+        a = flip(getsnapshot(vid),2);
+        aN = double(rgb2gray(a))/255;
+        bN = sectorsN .* aN;
+        b = uint8(255*bN);
+        c = flip(getsnapshot(vid),2);
+        cN = double(rgb2gray(c))/255;
+        dN = sectorsN .* cN;
+        d = uint8(255*dN);
+
+        e = b-d;
+
+        eDown = e(down(1,1):down(1,2),down(2,1):down(2,2));
+        maxEDown = max(eDown(:));
+
+        maxValue = 50;
+
+        if maxEDown > maxValue
+             disp('down');
+            dd=1;
+        end
+         pause(0.5)
+    end
+        if (dd == 1)
+            disp('Down')
+            contador = contador + 2;
+        else
+            contador = contador - 2;
+        end
+ elseif n == 4
+     set(handles.axes11,'color','b');
+     for i = 1:2
+        a = flip(getsnapshot(vid),2);
+        aN = double(rgb2gray(a))/255;
+        bN = sectorsN .* aN;
+        b = uint8(255*bN);
+        c = flip(getsnapshot(vid),2);
+        cN = double(rgb2gray(c))/255;
+        dN = sectorsN .* cN;
+        d = uint8(255*dN);
+
+        e = b-d;
+
+        eRight = e(right(1,1):right(1,2),right(2,1):right(2,2));
+        maxERight = max(eRight(:));
+
+        maxValue = 50;
+
+        if maxERight > maxValue
+             disp('right');
+            r=1;
+        end
+        pause(0.5)
+    end
+       if (r == 1)
+            disp('Right')
+            contador = contador + 2;
+        else
+            contador = contador - 2;
+        end
+ end
+set(handles.text6,'String',num2str(contador));
+pause(1);
+set(handles.axes6,'color','k');
+set(handles.axes9,'color','k');
+set(handles.axes10,'color','k');
+set(handles.axes11,'color','k');
 end
             
 % --- Executes on button press in restart.
