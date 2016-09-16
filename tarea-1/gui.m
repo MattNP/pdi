@@ -192,19 +192,56 @@ axis off
 
 %Cargamos la canción a reproducir 
 cancion = audioread('twice.wav');
-sound(cancion,44100);               %Reproducimos la canción a una frecuencia de 44100Ghz
+sound(cancion,44100);       %Reproducimos la canción a una frecuencia de 44100Ghz
 
 
-for i = 1:1000 
-    set(handles.axes6,'Color','r');
+while(true)
+    n = round(4*rand+1);
+    for i = 1: 640
+         switch n
+            case 1
+                set(handles.axes6,'color','r');
+            case 2
+                set(handles.axes6,'color','b');
+            case 3
+                set(handles.axes6,'color','y');
+            case 4
+                set(handles.axes6,'color','g');
+        end
+    end
+   
     pause(1);
-    set(handles.axes6,'Color','y');
-    pause(1);
-    set(handles.axes6,'Color','b');
-    pause(1);
-    set(handles.axes6,'Color','g');
-    pause(1);
+    set(handles.axes6,'color','w');
+    pause(0.5);
 end
+            
+
+
+% x=-5:1:10;
+% i=1;
+% while 1
+% color1=[rand rand rand];
+%   plot(x,2*x,'color',color1)
+%  a=input('te gusta=','s');
+%  if strcmp(a,'si')
+%      colores(:,i)=color1;
+%      i=i+1;
+%  else
+%      if strcmp(a,'1')
+%          break;
+%      end
+%  end
+% end
+% 
+% display(colores)
+
+% r =[1 1 0];
+% b =[0 0 1];
+% y =[1 1 0];
+% g =[0 1 0];
+% colores = [[1 1 0],[0 0 1],[1 1 0],[0 1 0]];
+
+
 
 % --- Executes on button press in restart.
 function restart_Callback(hObject, eventdata, handles)
