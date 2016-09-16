@@ -92,8 +92,14 @@ preview(vid,hImage);
 %Ocultamos el text7
  set(handles.text7,'visible','off');
  
- 
+%Ponemos un borde blanco en axes1
 axes(handles.axes1)
+handles.ax = gca;
+handles.ax.XColor = 'white';
+handles.ax.YColor = 'white';
+
+%ponemos un borde blanco en axes6
+axes(handles.axes6)
 handles.ax = gca;
 handles.ax.XColor = 'white';
 handles.ax.YColor = 'white';
@@ -154,7 +160,7 @@ theta = linspace(0, 2*pi);
 x=1+0.5*cos(theta);
 y=2+0.5*sin(theta);
 plot(x,y);
-fill(x,y,'b');      %Función para rellenar la b indica blue
+fill(x,y,'r');      %Función para rellenar la b indica blue
 axis equal
 set(gca,'XTickLabel',[]);
 set(gca,'YTickLabel',[]);
@@ -162,7 +168,7 @@ axis off
 pause(1);
 
 %Pintamos el circulo de rojo
-fill(x,y,'r');
+fill(x,y,'orange');
 axis equal
 set(gca,'XTickLabel',[]);
 set(gca,'YTickLabel',[]);
@@ -170,7 +176,7 @@ axis off
 pause(1);
 
 %Pintamos el circulo de verde
-fill(x,y,'g');
+fill(x,y,'y');
 axis equal
 set(gca,'XTickLabel',[]);
 set(gca,'YTickLabel',[]);
@@ -178,7 +184,7 @@ axis off
 pause(1);
 
 %Pintamos el circulo de Amarillo
-fill(x,y,'y');
+fill(x,y,'g');
 axis equal
 set(gca,'XTickLabel',[]);
 set(gca,'YTickLabel',[]);
@@ -197,8 +203,12 @@ set(handles.text7,'visible','off'); %Ocultamos text7
 
 %Acomodamos la imagen con los puntos de los sensores
 axes(handles.axes1)
-handles.imagenag = imread('baileg.png');
-imagesc(handles.imagenag)
+handles.imagen = imread('baile.jpeg');
+handles.imagenag = imread('resources/botones.png');
+a = imresize(handles.imagen,[480 640]);
+b = imresize(handles.imagenag,[480 640]);
+ima = a+b;
+imagesc(ima)
 axis off
 
 %Cargamos la canción a reproducir 
