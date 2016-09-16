@@ -20,13 +20,13 @@ clear all; close all; clc
 % DEFINIMOS LAS VARIABLES X0,X1,Y0,Y1 PARA CADA SECCIÓN
 % |Y0,Y1|
 % |X0,X1|
-up = [64,192;256,384];
+up = [64,191;256,383];
 left = [192,320;64,192];
 right = [192,320;448,576];
 down = [320,448;256,384];
 
-% CREAMOS IMAGEN CON LAS VENTANAS DONDE SE APLICARÁ EL SENSOR DE
-% MOVIMIENTO
+% % CREAMOS IMAGEN CON LAS VENTANAS DONDE SE APLICARÁ EL SENSOR DE
+% % MOVIMIENTO
 
 sectors = zeros(480,640,'uint8');
 sectors(up(1,1):up(1,2),up(2,1):up(2,2)) = 255;
@@ -42,13 +42,16 @@ hFig = figure('Toolbar','none',...
 
 % CONFIGURAMOS LA ADQUISICIÓN DEL VIDEO
 vid = videoinput('linuxvideo',1,'RGB24_640x480');
+vid.FramesPerTrigger = 5;
+vid.TriggerRepeat = 4;
+vid.FramesAcquiredFcnCount = 5;
 
 % CREAMOS EL OBJETO IMAGEN DONDE SE VA A MOSTRAR EL VIDEO
 vidRes = vid.VideoResolution;
 imWidth = vidRes(1);
 imHeight = vidRes(2);
 nBands = vid.NumberOfBands;
-hImage = image( zeros(imHeight, imWidth, nBands) );
+hImage = image(zeros(imHeight, imWidth, nBands));
 
 % ESPECIFICAMOS LA POSICIÓN DE LA IMAGEN PARA QUE SE MUESTRE CORRECTSAMENTE
 % EN EL CENTRO
@@ -65,5 +68,3 @@ setappdata(hImage,'UpdatePreviewWindowFcn',@mypreview_fcn);
 
 % VISUALIZAMOS EL VIDEO
 preview(vid, hImage);
-
-close all;
