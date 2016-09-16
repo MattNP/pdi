@@ -25,7 +25,7 @@ left = [192,320;64,192];
 right = [192,320;448,576];
 down = [320,448;256,384];
 
-% % CREAMOS IMAGEN CON LAS VENTANAS DONDE SE APLICARÁ EL SENSOR DE
+% % CREAMOS IMAGEN CON LAS VENTANAS DONDE SE APLICAR�? EL SENSOR DE
 % % MOVIMIENTO
 
 sectors = zeros(480,640,'uint8');
@@ -41,7 +41,7 @@ hFig = figure('Toolbar','none',...
        'Name','My Custom Preview GUI');
 
 % CONFIGURAMOS LA ADQUISICIÓN DEL VIDEO
-vid = videoinput('linuxvideo',1,'RGB24_640x480');
+vid = videoinput('winvideo',1,'YUY2_640x480');
 vid.FramesPerTrigger = 5;
 vid.TriggerRepeat = 4;
 vid.FramesAcquiredFcnCount = 5;

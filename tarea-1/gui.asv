@@ -66,11 +66,22 @@ guidata(hObject, handles);
 % imagesc(handles.imagen)    %La mostramos en el axis1
 % axis off %Quitamos los ejes
 
+%imagen = imread('baile.jpeg');
+% sectors = imread('sectors.png');
+% a = resize(imagen,[640 480]);
+% b = resize(sectors,[640 480]);
+% bg = a*b;
+% figure(1);imshow(bg);
+
 % Cargamos la imagen base en el axis2
 axes(handles.axes2)
 handles.imagena2 = imread('baile.jpeg');
 imagesc(handles.imagena2)
 axis off
+
+% cargamos el video en el axis2
+
+
 
 %Ocultamos el text7
  set(handles.text7,'visible','off');
@@ -191,15 +202,15 @@ suma = [];
          set(handles.axes6,'color','y');
          for i=1:5
              a = getsnapshot(vid);
-             a1 = rgb2gray(a);
-             c = a1(192:320,64:192);
-             b = getsnapshot(vid);
-             b1 = rgb2gray(b);
-             d = b1(192:320,64:192);
-             e = c-d;
-             suma =[suma, sum(e(:))];
-             figure(1);plot(suma)
+             c = a(192:320,64:192);
+            b = getsnapshot(vid);
+            d = b(192:320,64:192);
+            e = c-d;
+            suma =[suma, sum(e(:))];
+            figure(1);plot(suma)
             
+%             eLeft = e(left(1,1):left(1,2),left(2,1):left(2,2));
+%             maxELeft = max(eLeft(:));
          end
             if suma ~= 0
                 disp('left')
@@ -213,15 +224,25 @@ suma = [];
      elseif n == 2
          set(handles.axes9,'color','g');
          for i=1:5
-              a = getsnapshot(vid);
-             a1 = rgb2gray(a);
-             c = a1(192:320,64:192);
-             b = getsnapshot(vid);
-             b1 = rgb2gray(b);
-             d = b1(192:320,64:192);
-             e = c-d;
-             suma =[suma, sum(e(:))];
-             figure(1);plot(suma)
+             a = getsnapshot(vid);
+             c = a(192:320,64:192);
+%             a = flip(getsnapshot(vid),2);
+%             aN = double(rgb2gray(a))/255;
+%             bN = sectorsN .* aN;
+%             b = uint8(255*bN);
+            b = getsnapshot(vid);
+            d = b(192:320,64:192);
+%             c = flip(getsnapshot(vid),2);
+%             cN = double(rgb2gray(c))/255;
+%             dN = sectorsN .* cN;
+%             d = uint8(255*dN);
+
+            e = c-d;
+            suma =[suma, sum(e(:))];
+            figure(1);plot(suma)
+            
+%             eLeft = e(left(1,1):left(1,2),left(2,1):left(2,2));
+%             maxELeft = max(eLeft(:));
          end
             if suma ~= 0
                 disp('up')
@@ -236,14 +257,24 @@ suma = [];
          set(handles.axes10,'color','r'); 
          for i=1:5
              a = getsnapshot(vid);
-             a1 = rgb2gray(a);
-             c = a1(192:320,64:192);
-             b = getsnapshot(vid);
-             b1 = rgb2gray(b);
-             d = b1(192:320,64:192);
-             e = c-d;
-             suma =[suma, sum(e(:))];
-             figure(1);plot(suma)
+             c = a(192:320,64:192);
+%             a = flip(getsnapshot(vid),2);
+%             aN = double(rgb2gray(a))/255;
+%             bN = sectorsN .* aN;
+%             b = uint8(255*bN);
+            b = getsnapshot(vid);
+            d = b(192:320,64:192);
+%             c = flip(getsnapshot(vid),2);
+%             cN = double(rgb2gray(c))/255;
+%             dN = sectorsN .* cN;
+%             d = uint8(255*dN);
+
+            e = c-d;
+            suma =[suma, sum(e(:))];
+            figure(1);plot(suma)
+            
+%             eLeft = e(left(1,1):left(1,2),left(2,1):left(2,2));
+%             maxELeft = max(eLeft(:));
          end
             if suma ~= 0
                 disp('down')
@@ -258,14 +289,24 @@ suma = [];
          set(handles.axes11,'color','b');
           for i=1:5
              a = getsnapshot(vid);
-             a1 = rgb2gray(a);
-             c = a1(192:320,64:192);
-             b = getsnapshot(vid);
-             b1 = rgb2gray(b);
-             d = b1(192:320,64:192);
-             e = c-d;
-             suma =[suma, sum(e(:))];
-             figure(1);plot(suma)
+             c = a(192:320,64:192);
+%             a = flip(getsnapshot(vid),2);
+%             aN = double(rgb2gray(a))/255;
+%             bN = sectorsN .* aN;
+%             b = uint8(255*bN);
+            b = getsnapshot(vid);
+            d = b(192:320,64:192);
+%             c = flip(getsnapshot(vid),2);
+%             cN = double(rgb2gray(c))/255;
+%             dN = sectorsN .* cN;
+%             d = uint8(255*dN);
+
+            e = c-d;
+            suma =[suma, sum(e(:))];
+            figure(1);plot(suma)
+            
+%             eLeft = e(left(1,1):left(1,2),left(2,1):left(2,2));
+%             maxELeft = max(eLeft(:));
          end
             if suma ~= 0
                 disp('up')
