@@ -1,14 +1,14 @@
-function [a] = SensorMov()
-vid = videoinput('linuxvideo',1,'RGB24_640x480');
+function [u,l,r,dd] = SensorMov(vid)
+% vid = videoinput('winvideo',1,'YUY2_640x480');
 
 % CREAMOS UNA FIGURA PARA MOSTRAR LA IMAGEN
-hFig = figure('Toolbar','none',...
-       'Menubar', 'none',...
-       'NumberTitle','Off',...
-       'Name','My Custom Preview GUI');
+% hFig = figure('Toolbar','none',...
+%        'Menubar', 'none',...
+%        'NumberTitle','Off',...
+%        'Name','My Custom Preview GUI');
 
 % CONFIGURAMOS LA ADQUISICIÓN DEL VIDEO
-vid = videoinput('linuxvideo',1,'RGB24_640x480');
+vid = videoinput('winvideo',1,'YUY2_640x480');
 vid.FramesPerTrigger = 5;
 vid.TriggerRepeat = 4;
 vid.FramesAcquiredFcnCount = 5;
@@ -22,16 +22,16 @@ hImage = image(zeros(imHeight, imWidth, nBands));
 
 % ESPECIFICAMOS LA POSICIÓN DE LA IMAGEN PARA QUE SE MUESTRE CORRECTSAMENTE
 % EN EL CENTRO
-figSize = get(hFig,'Position');
-figWidth = figSize(3);
-figHeight = figSize(4);
-gca.unit = 'pixels';
-gca.position = [ ((figWidth - imWidth)/2)... 
-               ((figHeight - imHeight)/2)...
-               imWidth imHeight ];
-
-setappdata(hImage,'UpdatePreviewWindowFcn',@flip_fcn);
-preview(vid, hImage);
+% figSize = get(hFig,'Position');
+% figWidth = figSize(3);
+% figHeight = figSize(4);
+% gca.unit = 'pixels';
+% gca.position = [ ((figWidth - imWidth)/2)... 
+%                ((figHeight - imHeight)/2)...
+%                imWidth imHeight ];
+% 
+% setappdata(hImage,'UpdatePreviewWindowFcn',@flip_fcn);
+% preview(vid, hImage);
 
 up = [64,192;256,384];
 left = [192,320;64,192];
@@ -44,7 +44,12 @@ sectors(left(1,1):left(1,2),left(2,1):left(2,2)) = 255;
 sectors(right(1,1):right(1,2),right(2,1):right(2,2)) = 255;
 sectors(down(1,1):down(1,2),down(2,1):down(2,2)) = 255;
 sectorsN = double(sectors/255);
-while 1
+
+u=0;
+l=0;
+dd=0;
+r=0;
+for i = 1:5
     a = flip(getsnapshot(vid),2);
     aN = double(rgb2gray(a))/255;
     bN = sectorsN .* aN;
@@ -71,20 +76,27 @@ while 1
     maxValue = 50;
     
     if maxEUp > maxValue
-        disp('up');
+          disp('up');
+        u=1;
     end
     
     if maxELeft > maxValue
-        disp('left');
+         disp('left')
+        l=1;
     end
     
     if maxERight > maxValue
-        disp('right');
+         disp('right');
+        r=1;
     end
     
     if maxEDown > maxValue
-        disp('down');
+         disp('down');
+        dd=1;
     end
+    pause(0.1)
+
 end
+delete(vid);
 end
 

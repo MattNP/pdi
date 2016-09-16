@@ -80,14 +80,14 @@ imagesc(handles.imagena2)
 axis off
 
 %cargamos el video en el axis2
-vid = videoinput('winvideo',1,'YUY2_640x480');
-set(vid,'ReturnedColorSpace','rgb');
-vidRes = get(vid, 'VideoResolution');
-imWidth = vidRes(1);
-imHeight = vidRes(2);
-nBands = get(vid, 'NumberOfBands');
-hImage = image( zeros(imHeight, imWidth, nBands),'Parent',handles.axes2 );
-preview(vid,hImage);
+% vide = videoinput('winvideo',1,'YUY2_640x480');
+% set(vide,'ReturnedColorSpace','rgb');
+% vidRes = get(vide, 'VideoResolution');
+% imWidth = vidRes(1);
+% imHeight = vidRes(2);
+% nBands = get(vide, 'NumberOfBands');
+% hImage = image( zeros(imHeight, imWidth, nBands),'Parent',handles.axes2 );
+% preview(vide,hImage);
 
 %Ocultamos el text7
  set(handles.text7,'visible','off');
@@ -107,6 +107,24 @@ handles.ax.YColor = 'white';
 
 %ponemos un borde blanco en axes2
 axes(handles.axes2)
+handles.ax = gca;
+handles.ax.XColor = 'white';
+handles.ax.YColor = 'white';
+
+%ponemos un borde blanco en axes9
+axes(handles.axes9)
+handles.ax = gca;
+handles.ax.XColor = 'white';
+handles.ax.YColor = 'white';
+
+%ponemos un borde blanco en axes10
+axes(handles.axes10)
+handles.ax = gca;
+handles.ax.XColor = 'white';
+handles.ax.YColor = 'white';
+
+%ponemos un borde blanco en axes11
+axes(handles.axes11)
 handles.ax = gca;
 handles.ax.XColor = 'white';
 handles.ax.YColor = 'white';
@@ -194,25 +212,124 @@ axis off
 cancion = audioread('twice.wav');
 sound(cancion,44100);       %Reproducimos la canción a una frecuencia de 44100Ghz
 
+vid = videoinput('winvideo',1,'YUY2_640x480');
+vid.FramesPerTrigger = 5;
+vid.TriggerRepeat = 4;
+vid.FramesAcquiredFcnCount = 5;
 
-while(true)
-    n = round(4*rand+1);
-    for i = 1: 640
-         switch n
-            case 1
-                set(handles.axes6,'color','r');
-            case 2
-                set(handles.axes6,'color','b');
-            case 3
-                set(handles.axes6,'color','y');
-            case 4
-                set(handles.axes6,'color','g');
-        end
+up = [64,192;256,384];
+left = [192,320;64,192];
+right = [192,320;448,576];
+down = [320,448;256,384];
+
+sectors = zeros(480,640,'uint8');
+sectors(up(1,1):up(1,2),up(2,1):up(2,2)) = 255;
+sectors(left(1,1):left(1,2),left(2,1):left(2,2)) = 255;
+sectors(right(1,1):right(1,2),right(2,1):right(2,2)) = 255;
+sectors(down(1,1):down(1,2),down(2,1):down(2,2)) = 255;
+sectorsN = double(sectors/255);
+
+u=0;
+l=0;
+dd=0;
+r=0;
+for i = 1:5
+    a = flip(getsnapshot(vid),2);
+    aN = double(rgb2gray(a))/255;
+    bN = sectorsN .* aN;
+    b = uint8(255*bN);
+    c = flip(getsnapshot(vid),2);
+    cN = double(rgb2gray(c))/255;
+    dN = sectorsN .* cN;
+    d = uint8(255*dN);
+    
+    e = b-d;
+
+    eUp = e(up(1,1):up(1,2),up(2,1):up(2,2));
+    maxEUp = max(eUp(:));
+    
+    eLeft = e(left(1,1):left(1,2),left(2,1):left(2,2));
+    maxELeft = max(eLeft(:));
+    
+    eRight = e(right(1,1):right(1,2),right(2,1):right(2,2));
+    maxERight = max(eRight(:));
+    
+    eDown = e(down(1,1):down(1,2),down(2,1):down(2,2));
+    maxEDown = max(eDown(:));
+    
+    maxValue = 50;
+    
+    if maxEUp > maxValue
+          disp('up');
+        u=1;
     end
-   
+    
+    if maxELeft > maxValue
+         disp('left')
+        l=1;
+    end
+    
+    if maxERight > maxValue
+         disp('right');
+        r=1;
+    end
+    
+    if maxEDown > maxValue
+         disp('down');
+        dd=1;
+    end
+    pause(0.1)
+
+end
+delete(vid);
+%ponemos en negro los axes 6,9,10,11
+set(handles.axes6,'color','b');
+set(handles.axes9,'color','b');
+set(handles.axes10,'color','b');
+set(handles.axes11,'color','b');
+
+contador = 0;
+while(true)
+     n = round(4*rand+1);
+     if n == 1
+         set(handles.axes6,'color','y');
+         [u,l,dd,r]=SensorMov();
+         if (l==1) 
+             set(handles.text6,'String','2');
+         else
+             set(handles.text6,'String','-2');
+         end
+     elseif n == 2
+         set(handles.axes9,'color','g');
+         [u,l,dd,r]=SensorMov();
+         if (u==1) 
+             contador = contador + 2;
+         else
+             contador = contador - 2;
+         end
+     elseif n == 3
+         set(handles.axes10,'color','r');
+         [u,l,dd,r]=SensorMov();
+         if (dd==1) 
+             contador = contador + 2;
+         else
+             contador = contador - 2;
+         end
+     elseif n == 4
+         set(handles.axes11,'color','b');
+         [u,l,dd,r]=SensorMov();
+         if (r==1) 
+             contador = contador + 2;
+         else
+            contador = contador - 2;
+         end
+     end
+     set(handles.text6,'String',num2str(contador));
     pause(1);
-    set(handles.axes6,'color','w');
-    pause(0.5);
+    set(handles.axes6,'color','k');
+    set(handles.axes9,'color','k');
+    set(handles.axes10,'color','k');
+    set(handles.axes11,'color','k');
 end
             
 % --- Executes on button press in restart.
