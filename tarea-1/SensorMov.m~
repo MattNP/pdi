@@ -1,0 +1,35 @@
+%--------------------------------------------------------------------------
+%------- Función para restar imágenes que indican movimiento---------------
+%------- Juego Musical ----------------------------------------------------
+%------- Por: Juan David Arias Guarín    juan.arias8@udea.edu.co ----------
+%-------      Estudiante Ingeniería de Sistemas  --------------------------
+%-------      CC 1017221148, Wpp 3117597936 -------------------------------
+%------------ Mateo Noreña Pino    mateo.norena@udea.edu.co ---------------
+%-------      Estudiante Ingeniería de Sistemas  --------------------------
+%-------      CC 1017221148, Wpp 3117597936 -------------------------------
+%------------ John Edisson Tapias Zarrazola    jedisson.tapias@udea.edu.co 
+%-------      Profesor Facultad de Ingenieria BLQ 21-409  -----------------
+%-------      Estudiante Ingeniería de Sistemas  --------------------------
+%-------      CC 1017221148, Wpp 3117597936 -------------------------------
+%------- Curso Básico de Procesamiento de Imágenes y Visión Artificial-----
+%------- V1 Septiembre de 2016---------------------------------------------
+%--------------------------------------------------------------------------
+
+%---- La función recibe dos imágenes a y c que representan dos instantes de
+%---- tiempo, una imagen monocromática normalizada que representa los
+%---- sectores donde se va a reconocer el movimiento. ---------------------
+%---- La función retorna una imagen con la cantidad de movimiento en los
+%----sectores establecidos. -----------------------------------------------
+function e = SensorMov(a, c, sectors)
+
+aN = double(rgb2gray(a))/255;   % Normalizamos la imagen a
+bN = sectors .* aN;             % Multiplicamos la imagen a normalizada por los sectores
+b = uint8(255*bN);              % Convertimos la imagen con
+cN = double(rgb2gray(c))/255;
+dN = sectors .* cN;
+d = uint8(255*dN);
+
+e = b-d;
+
+end
+
