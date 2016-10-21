@@ -1,5 +1,6 @@
 clear all, close all, clc;
-a = imread('3_Esquejes/esquejes (389).TIFF');
+a = imread('36.TIFF');
+
 b = rgb2gray(a);
 [b,c] = componentes_color(a);
 %[d] = filtros(c);
