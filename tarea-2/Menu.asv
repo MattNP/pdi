@@ -1,4 +1,7 @@
 function varargout = Menu(varargin)
+clc;
+music = audioread('electrical.mp3');
+sound(music);
 % MENU MATLAB code for Menu.fig
 %      MENU, by itself, creates a new MENU or raises the existing
 %      singleton*.
@@ -44,6 +47,8 @@ end
 % End initialization code - DO NOT EDIT
 
 
+
+
 % --- Executes just before Menu is made visible.
 function Menu_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
@@ -57,6 +62,16 @@ handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
+ha = axes('units','normalized', ...
+            'position',[0 0 1 1]);
+% El fondo hacia la parte inferior
+uistack(ha,'bottom');
+I=imread('background.jpg');
+hi = imagesc(I)
+colormap gray
+% Ejes invisibles
+set(ha,'handlevisibility','off', ...
+            'visible','off')
 
 % UIWAIT makes Menu wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -176,7 +191,8 @@ function Untitled_5_Callback(hObject, eventdata, handles)
 % hObject    handle to Untitled_5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-msgbox({'Software para reconocer esquejes' 'Desarrollado por:' '>>Mateo Noreña' '>>John Tapias' 'Octubre 2016'},'Acerca de')
+alienIco = imread('alien.png');
+msgbox({'Software para reconocer esquejes' 'Desarrollado por:' '>>Mateo Noreña' '>>John Tapias' 'Procesamiento Digital de imagenes' 'Octubre 2016'},'Acerca de','custom',alienIco);
 
 
 % --------------------------------------------------------------------
@@ -185,12 +201,19 @@ function Untitled_2_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+msgbox({'a-----Largo máximo del esqueje en centímetros, (Esqueje largo)' 'b-----Largo mínimo en centímetros, (Esqueje corto)' 'c-----Distancia de la base del tallo a la primera hoja ( Esqueje hoja en base) en milímetros.'},'Ayuda','help');
+
 
 % --------------------------------------------------------------------
 function Untitled_4_Callback(hObject, eventdata, handles)
 % hObject    handle to Untitled_4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+byeIco = imread('bye.png');
+msgbox('Bye !!','','custom',byeIco);
+pause(0.2);
+clear all;
+close all;
 
 
 % --- Executes when figure1 is resized.
@@ -198,3 +221,4 @@ function figure1_SizeChangedFcn(hObject, eventdata, handles)
 % hObject    handle to figure1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+

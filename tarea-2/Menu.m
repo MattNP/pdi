@@ -162,9 +162,18 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+%Load images
+[filename1,filepath1]=uigetfile({'*.*','All Files'},...
+  'Seleccione el esqueje a analizar');
+  cd(filepath1);
+ handles.rawimg=imread([filepath1 filename1]);
+
 largo = str2double(get(handles.edit1,'String'));
 corto = str2double(get(handles.edit2,'String'));
 hoja = str2double(get(handles.edit3,'String'));
+
+%Análisis de la imágen
 
 
 
@@ -221,3 +230,4 @@ function figure1_SizeChangedFcn(hObject, eventdata, handles)
 % hObject    handle to figure1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
