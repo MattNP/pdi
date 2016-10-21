@@ -1,5 +1,5 @@
 clear all, close all, clc;
-a = imread('3_Esquejes/esquejes (20).TIFF');
+a = imread('3_Esquejes/esquejes (389).TIFF');
 b = rgb2gray(a);
 [b,c] = componentes_color(a);
 %[d] = filtros(c);
@@ -25,10 +25,39 @@ e = imclose(e,ee);
 e = logical(e);
 prop = regionprops(e,'all');
 chiquita = prop.Image;
-f = imrotate(e, -prop(1).Orientation);
-subplot 121; imshow(e);
-subplot 122; imshow(chiquita);
+subplot 131; imshow(e);
 
+g = chiquita;
+[m,n] = size(g);
+midM = fix(m/2);
+range = 30;
+maxSum = sum(sum(g(midM-range/2:midM+range/2,:)));
+minAng = 0;
+for i = 1:180
+    g = imrotate(chiquita, i);
+    [m,n] = size(g);
+    midM = fix(m/2);
+    sumI = sum(sum(g(midM-range/2:midM+range/2,:)));
+    if sumI > maxSum
+        maxSum = sumI;
+        minAng = i;
+    end
+end
+
+f = imrotate(chiquita, minAng);
+subplot 132; imshow(f);
+
+[fil,col] = size(f);
+vec = zeros(1,col);
+for i=1: col
+   for j =1: fil
+       if (f(j,i) == 1)
+           vec(i) = vec(i)+1;
+       end
+   end
+end
+
+subplot 133; plot(vec);
 
 % d = e;
 % d = [d,d,d];
