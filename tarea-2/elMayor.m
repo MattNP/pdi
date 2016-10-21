@@ -19,6 +19,6 @@ d = max(areaT(:));
 b = a*0; 
 d = find(areaT == d);
 b(l == d) = 255;
-b = imclearborder(b);
+%b = imclearborder(b);
 % b = imfill(b);
 end
