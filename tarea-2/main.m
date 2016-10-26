@@ -63,7 +63,7 @@ extremaImage = propImage.Extrema;
 
 factorConversion = 0.15;
 
-% Hallar máxima distancia
+% Hallar mï¿½xima distancia
 maxDist = pdist([extremaImage(4,:); extremaImage(7,:)]);
 distMilimeters = maxDist * factorConversion;
 [lengthEsqueje, y] = max(sum(f,2));
@@ -73,6 +73,8 @@ y1 = extremaImage(4,2);
 y2 = extremaImage(7,2);
 % f3 = imdistline(gca,[0 n],[midM midM]);
 f2 = imdistline(gca,[x1 x2],[y1 y2]);
+
+
 
 [fil,col] = size(f);
 vec = zeros(1,col);
