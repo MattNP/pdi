@@ -1,5 +1,5 @@
 clear all, close all, clc;
-a = imread('3_Esquejes/esquejes (66).TIFF');
+a = imread('img/esquejes (333).TIFF');
 b = rgb2gray(a);
 [b,c] = componentes_color(a);
 d = c;

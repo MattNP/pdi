@@ -32,23 +32,22 @@ minAng = 0;
 
 % f = imrotate(imageEsqueje, minAng);
 f = imageEsqueje;
-propImage = regionprops(f,'all');
-extremaImage = propImage.Extrema;
 
+propImage = regionprops(f,'all');
 x = propImage.Extrema(7,1) - propImage.Extrema(3,1);
 y = propImage.Extrema(7,2) - propImage.Extrema(3,2);
 %%if (x<0 && y>=0) || (x<0 && y<0)
     %%finalAng = atand(abs(y/x));
 finalAng = atand(y/x);
-hip = sqrt(x^2 + y^2);
-disp(['햚gulo imagen: ', num2str(finalAng, 3)]);
-disp(['Hipotenusa: ', num2str(hip, 3)]);
+disp(['햚gulo imagen: ', double2str(finalAng)]);
+subplot 131; imshow(f);
+propImage = regionprops(f,'all');
+extremaImage = propImage.Extrema;
 
 x1 = extremaImage(3,1);
 x2 = extremaImage(7,1);
 y1 = extremaImage(3,2);
 y2 = extremaImage(7,2);
-subplot 131; imshow(f);
 f1 = imdistline(gca,[x1 x2],[y1 y2]);
 
 rotated = imrotate(f, finalAng);
@@ -58,9 +57,7 @@ extremaImage = propImage.Extrema;
 x = propImage.Extrema(7,1) - propImage.Extrema(3,1);
 y = propImage.Extrema(7,2) - propImage.Extrema(3,2);
 finalAng = atand(y/x);
-hip = sqrt(x^2 + y^2);
-disp(['햚gulo imagen rotada: ', num2str(finalAng, 3)]);
-disp(['Hipotenusa: ', num2str(hip, 3)]);
+disp(['햚gulo imagen rotada: ', double2str(finalAng)]);
 
 x1 = extremaImage(3,1);
 x2 = extremaImage(7,1);
@@ -73,4 +70,6 @@ f2 = imdistline(gca,[x1 x2],[y1 y2]);
     %%finalAng = -atand(abs(y/x));
 %%end
 
-f = rotated;
+
+
+f = imrotate(f, finalAng);
