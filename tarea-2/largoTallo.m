@@ -16,7 +16,7 @@ end
 subplot 133; plot(vec);
 [m, n] = size(vec);
 for i = 1 : n
-    if vec(i) >= 80
+    if vec(i) >= 60
         break
     end
 end

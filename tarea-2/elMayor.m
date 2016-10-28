@@ -17,8 +17,8 @@ for i = 1 : n
 end
 d = max(areaT(:));
 b = a*0; 
-d = find(areaT == d);
-b(l == d) = 255;
-%b = imclearborder(b);
-% b = imfill(b);
+if d > 50000
+    d = find(areaT == d);
+    b(l == d) = 255;
+    b = imclearborder(b);
 end

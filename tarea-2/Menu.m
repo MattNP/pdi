@@ -25,7 +25,7 @@ sound(music);
 
 % Edit the above text to modify the response to help Menu
 
-% Last Modified by GUIDE v2.5 21-Oct-2016 01:10:06
+% Last Modified by GUIDE v2.5 28-Oct-2016 02:28:08
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -87,8 +87,6 @@ function varargout = Menu_OutputFcn(hObject, eventdata, handles)
 % Get default command line output from handles structure
 varargout{1} = handles.output;
 
-
-
 function edit1_Callback(hObject, eventdata, handles)
 % hObject    handle to edit1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -111,7 +109,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-
 function edit2_Callback(hObject, eventdata, handles)
 % hObject    handle to edit2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -119,7 +116,6 @@ function edit2_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of edit2 as text
 %        str2double(get(hObject,'String')) returns contents of edit2 as a double
-
 
 % --- Executes during object creation, after setting all properties.
 function edit2_CreateFcn(hObject, eventdata, handles)
@@ -132,8 +128,6 @@ function edit2_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
 
 function edit3_Callback(hObject, eventdata, handles)
 % hObject    handle to edit3 (see GCBO)
@@ -164,26 +158,37 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 %Load images
-[filename1,filepath1]=uigetfile({'*.*','All Files'},...
+
+global img
+[filename1,filepath1]=uigetfile({'*.TIFF','All Files'},...
   'Seleccione el esqueje a analizar');
-  %cd(filepath1);
- %handles.rawimg=imread([filepath1 filename1]);
- a=imread([filepath1 filename1]);
+if filename1~=0
+	if strcmp(filename1(end-3:end),'TIFF')
+		img = imread([filepath1 filename1]);
+	else
+		errordlg('El archivo debe ser .TIFF');
+		return
+    end
+
+	% Graficar la imagen
+	set(handles.axes1,'visible','on');
+	imshow(img);
+end
+
+
+% --- Executes on button press in pushbutton2.
+function pushbutton2_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+%y = str2num(get(handles.edit1,'string'));
+
+global f
 
 largo = str2double(get(handles.edit1,'String'));
 corto = str2double(get(handles.edit2,'String'));
 hoja = str2double(get(handles.edit3,'String'));
 
-%Anï¿½lisis de la imï¿½gen
-[b,c] = componentes_color(a);
-d = c;
-figure(2); imshow(b);
-em = 160;
-d(d > em) = 255; 
-d(d < 255) = 0;
-[e] = elMayor(d);
-
-f = alinearEsqueje(e);
 propImage = regionprops(f,'all');
 extremaImage = propImage.Extrema;
 
@@ -193,47 +198,30 @@ factorConversion = 0.15;
 maxDist = pdist([extremaImage(3,:); extremaImage(7,:)]);
 distMilimeters = maxDist * factorConversion;
 [lengthEsqueje, y] = max(sum(f,2));
-x1 = extremaImage(3,1);
-x2 = extremaImage(7,1);
-y1 = extremaImage(3,2);
-y2 = extremaImage(7,2);
-% f3 = imdistline(gca,[0 n],[midM midM]);
-% f2 = imdistline(gca,[x1 x2],[y1 y2]);
 
-maxWidth = pdist([extremaImage(1,:); extremaImage(5,:)]);
-distMilimeters = maxDist * factorConversion;
-[widthEsqueje, y] = max(sum(f,2));
-x1 = extremaImage(1,1);
-x2 = extremaImage(5,1);
-y1 = extremaImage(1,2);
-y2 = extremaImage(5,2);
-f3 = imdistline(gca,[x1 x2],[y1 y2]);
+% maxWidth = pdist([extremaImage(1,:); extremaImage(5,:)]);
+% distMilimeters = maxDist * factorConversion;
+% [widthEsqueje, y] = max(sum(f,2));
 
-hold on
-plot(propImage.ConvexHull(:,1),propImage.ConvexHull(:,2),'LineWidth',2);
-hold off
-
-lTallo = largoTallo(f) * factorConversion;
+lTalloHoja = largoTallo(f) * factorConversion;
 
 area = propImage.Area * factorConversion^2;
 
-d = e;
-d = [d,d,d];
-[fil,col,cap] = size(a);
-d = reshape(d,[fil,col,cap]);
-a(d==0)=0;
-figure(7); imshow(a);
+tEsqueje = 'Ideal';
+if distMilimeters > largo*10
+    tEsqueje = 'Esqueje largo';
+else if distMilimeters < corto*10
+        tEsqueje = 'Esqueje corto';
+    else if lTalloHoja > hoja
+            tEsqueje = 'Esqueje hoja en base';
+        end
+    end
+end
 
-
-% --- Executes on button press in pushbutton2.
-function pushbutton2_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-%y = str2num(get(handles.edit1,'string'));
-set(handles.edit1,'String','0');
-set(handles.edit2,'String','0');
-set(handles.edit3,'String','0');
+set(handles.tipoEsqueje,'String',tEsqueje);
+set(handles.longitudMaxima,'String',num2str(maxDist));
+set(handles.longitudBaseHoja,'String',lTalloHoja);
+set(handles.area,'String',area);
 
 
 % --------------------------------------------------------------------
@@ -279,3 +267,151 @@ function figure1_SizeChangedFcn(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+
+
+% --- Executes on button press in pushbutton3.
+function pushbutton3_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+global img f
+
+%Anï¿½lisis de la imï¿½gen
+[b,c] = componentes_color(img);
+d = c;
+figure(2); imshow(b);
+em = 160;
+d(d > em) = 255; 
+d(d < 255) = 0;
+[e] = elMayor(d);
+
+ee = strel ('square',6);
+e = imclose(e,ee);
+e = logical(e);
+
+imwrite(e, 'Imagen.bmp');
+props = regionprops(e, 'all');
+disp(size(props));
+if size(props) ~= 0
+    degrees = alinearEsqueje(e);
+    f = imrotate(e,degrees);
+    g = imrotate(img,degrees);
+    % f = imresize(f, [1000, NaN]);
+    % g = imresize(g, [1000, NaN]);
+    [m, n] = size(f);
+    [o, p] = size(g);
+    figure(3); imshow(f);
+    figure(4); imshow(g);
+    disp(['Tamaño f: ', num2str(m), ' x ', num2str(n)]);
+    disp(['Tamaño g: ', num2str(o), ' x ', num2str(p)]);
+
+    d = f;
+    d = [d,d,d];
+    [fil,col,cap] = size(g);
+    d = reshape(d,[fil,col,cap]);
+    g(d==0)=0;
+    set(handles.axes1,'visible','on');
+    imshow(g);
+end
+
+
+
+function tipoEsqueje_Callback(hObject, eventdata, handles)
+% hObject    handle to tipoEsqueje (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of tipoEsqueje as text
+%        str2double(get(hObject,'String')) returns contents of tipoEsqueje as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function tipoEsqueje_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to tipoEsqueje (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function longitudMaxima_Callback(hObject, eventdata, handles)
+% hObject    handle to longitudMaxima (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of longitudMaxima as text
+%        str2double(get(hObject,'String')) returns contents of longitudMaxima as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function longitudMaxima_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to longitudMaxima (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function longitudBaseHoja_Callback(hObject, eventdata, handles)
+% hObject    handle to longitudBaseHoja (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of longitudBaseHoja as text
+%        str2double(get(hObject,'String')) returns contents of longitudBaseHoja as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function longitudBaseHoja_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to longitudBaseHoja (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function area_Callback(hObject, eventdata, handles)
+% hObject    handle to area (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of area as text
+%        str2double(get(hObject,'String')) returns contents of area as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function area_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to area (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes during object creation, after setting all properties.
+function axes1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to axes1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: place code in OpeningFcn to populate axes1

@@ -22,7 +22,7 @@ function varargout = main(varargin)
 
 % Edit the above text to modify the response to help main
 
-% Last Modified by GUIDE v2.5 15-Jun-2015 19:57:25
+% Last Modified by GUIDE v2.5 28-Oct-2016 02:00:43
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -728,3 +728,26 @@ else											%%%% Mensajes en Ingles
 end
 
 descripcion(handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function imagen_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to imagen (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: place code in OpeningFcn to populate imagen
+
+
+% --- Executes during object deletion, before destroying properties.
+function imagen_DeleteFcn(hObject, eventdata, handles)
+% hObject    handle to imagen (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on mouse press over axes background.
+function imagen_ButtonDownFcn(hObject, eventdata, handles)
+% hObject    handle to imagen (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
