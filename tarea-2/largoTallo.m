@@ -1,4 +1,4 @@
-function l = largoTallo(f)
+function [l,col] = largoTallo(f)
 
 propImage = regionprops(f,'all');
 extremaImage = propImage.Extrema;
@@ -16,7 +16,7 @@ end
 subplot 133; plot(vec);
 [m, n] = size(vec);
 for i = 1 : n
-    if vec(i) >= 60
+    if vec(i) >= 50
         break
     end
 end
@@ -37,3 +37,4 @@ end
 talloBase = pdist([x1,y1;x2,y2]);
 
 l = talloBase;
+col = i;

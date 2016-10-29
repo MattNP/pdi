@@ -203,7 +203,11 @@ distMilimeters = maxDist * factorConversion;
 % distMilimeters = maxDist * factorConversion;
 % [widthEsqueje, y] = max(sum(f,2));
 
-lTalloHoja = largoTallo(f) * factorConversion;
+[lTalloHoja, colHoja] = largoTallo(f); 
+lTalloHojaMM = lTalloHoja * factorConversion;
+
+f(:,colHoja:colHoja+5) = 255;
+imshow(f);
 
 area = propImage.Area * factorConversion^2;
 
@@ -212,7 +216,7 @@ if distMilimeters > largo*10
     tEsqueje = 'Esqueje largo';
 else if distMilimeters < corto*10
         tEsqueje = 'Esqueje corto';
-    else if lTalloHoja > hoja
+    else if lTalloHojaMM > hoja
             tEsqueje = 'Esqueje hoja en base';
         end
     end
@@ -220,7 +224,7 @@ end
 
 set(handles.tipoEsqueje,'String',tEsqueje);
 set(handles.longitudMaxima,'String',num2str(maxDist));
-set(handles.longitudBaseHoja,'String',lTalloHoja);
+set(handles.longitudBaseHoja,'String',lTalloHojaMM);
 set(handles.area,'String',area);
 
 
@@ -303,8 +307,8 @@ if size(props) ~= 0
     [o, p] = size(g);
     figure(3); imshow(f);
     figure(4); imshow(g);
-    disp(['Tamaño f: ', num2str(m), ' x ', num2str(n)]);
-    disp(['Tamaño g: ', num2str(o), ' x ', num2str(p)]);
+    disp(['Tamaï¿½o f: ', num2str(m), ' x ', num2str(n)]);
+    disp(['Tamaï¿½o g: ', num2str(o), ' x ', num2str(p)]);
 
     d = f;
     d = [d,d,d];
