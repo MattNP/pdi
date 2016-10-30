@@ -71,6 +71,8 @@ set(ha,'handlevisibility','off', ...
             'visible','off');
 set(handles.axes_original,'visible','off');
 set(handles.axes_aligned,'visible','off');
+set(handles.btn_align,'enable','off');
+set(handles.btn_classify,'enable','off');
 
 % UIWAIT makes Menu wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -97,6 +99,8 @@ if filename1~=0
 	% Graficar la imagen
 	set(handles.axes_original,'visible','on');
 	imshow(img, 'parent',handles.axes_original);
+    set(handles.btn_align,'enable','on');
+    set(handles.btn_classify,'enable','off');
 end
 
 % --- Executes on button press in btn_align.
@@ -153,6 +157,8 @@ if size(props) > 0
     imshow(imgEsqueje, 'parent', handles.axes_original);
     set(handles.axes_aligned,'visible','on');
     imshow(gEsqueje, 'parent', handles.axes_aligned);
+    
+    set(handles.btn_classify,'enable','on');
 end
 
 % --- Executes on button press in btn_classify.
