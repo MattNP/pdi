@@ -20,5 +20,4 @@ b = a*0;
 if d > 50000
     d = find(areaT == d);
     b(l == d) = 255;
-    b = imclearborder(b);
 end

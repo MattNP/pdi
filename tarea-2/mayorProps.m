@@ -1,5 +1,4 @@
 function [b] = mayorProps(a)
-
 [m, n] = size(a);
 areaMayor = a(1).Area;
 props = a(1);
