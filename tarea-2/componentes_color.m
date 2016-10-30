@@ -41,7 +41,7 @@ a5 = applycform(lab,cform);
 a5 = normaliza(a5);
 a5 = w2linea(a5);
 
-%
+% Retorna resultados
 b = [a1;a2;a3;a4;a5];
 y = normaliza(y);
 c = y;

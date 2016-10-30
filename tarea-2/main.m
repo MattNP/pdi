@@ -1,6 +1,6 @@
 clear all, close all, clc;
 pruebas = [56, 87, 158, 160, 206, 210, 275, 292, 302, 303, 320, 333, 353, 442];
-pruebas = [302, 320];
+pruebas = [56];
 [m, n] = size(pruebas);
 for i=1:n
     archivo = strcat('img/esquejes (', num2str(pruebas(i)), ').TIFF');

@@ -1,13 +1,13 @@
-%Alinear el esqueje con el eje horizontal con el tallo del esqueje y 
-%mostrar en pantalla original y alineado
+% Alinear el esqueje con el eje horizontal con el tallo del esqueje y 
+% mostrar en pantalla original y alineado
 function d = alinearEsqueje(e)
 
-prop = regionprops(e,'all');
+prop = regionprops(e,'Image');
 imageEsqueje = prop.Image;
 
 f = imageEsqueje;
 
-%Escoger lado donde se encuentra el tallo
+% Escoger lado donde se encuentra el tallo
 [m, n] = size(f);
 leftSide = f(:,1:n/2);
 rightSide = f(:,n/2+1:n);
@@ -22,7 +22,7 @@ ratioDown = sum(downSide(:))/(m*n);
 subs1 = abs(ratioLeft - ratioRight);
 subs2 = abs(ratioUp - ratioDown);
 
-if(subs1 > subs2)
+if subs1 > subs2
     if ratioLeft < ratioRight && sum(leftSide(:)) > 0
         talloLado = 'izquierda';
         side = leftSide;
@@ -46,16 +46,17 @@ end
  
 disp(['Lado tallo: ', talloLado]);
 
-portion = imrotate(side, firstAng);
-rpPortion = mayorProps(regionprops(portion, 'all'));
+portion = imrotate(side, firstAng); %-- Se lleva el tallo a la izquierda
+rpPortion = mayorProps(regionprops(portion, 'Area', 'ConvexArea', 'Orientation'));
+
+% disp(['Area: ', num2str(rpPortion.Area)]);
+% disp(['ConvexArea: ', num2str(rpPortion.ConvexArea)]);
+% disp(['Area/ConvexArea: ', num2str(rpPortion.Area/rpPortion.ConvexArea)]);
+% disp(['Eccentrecity: ', num2str(rpPortion.Eccentricity)]);
+
 i = 1;
 
-    disp(['Area: ', num2str(rpPortion.Area)]);
-    disp(['ConvexArea: ', num2str(rpPortion.ConvexArea)]);
-    disp(['Area/ConvexArea: ', num2str(rpPortion.Area/rpPortion.ConvexArea)]);
-    disp(['Eccentrecity: ', num2str(rpPortion.Eccentricity)]);
-
-%Tomar una porción del tallo que sea muy parecida a un rectángulo
+% Tomar una porción del tallo que sea simétrica
 while (rpPortion.Area/rpPortion.ConvexArea) < 0.75 && i < 3
     
     [m, n] = size(portion);
@@ -64,8 +65,8 @@ while (rpPortion.Area/rpPortion.ConvexArea) < 0.75 && i < 3
     
     sides = {leftSide, rightSide};
     
-    rpLeft = mayorProps(regionprops(leftSide, 'all'));
-    rpRight = mayorProps(regionprops(rightSide, 'all'));
+    rpLeft = mayorProps(regionprops(leftSide, 'Area', 'ConvexArea'));
+    rpRight = mayorProps(regionprops(rightSide, 'Area', 'ConvexArea'));
     
     ratioLeft = rpLeft.Area/rpLeft.ConvexArea;
     ratioRight = rpLeft.Area/rpRight.ConvexArea;
@@ -76,21 +77,23 @@ while (rpPortion.Area/rpPortion.ConvexArea) < 0.75 && i < 3
     
     portion = sides{indMaxRatio};
     
-    rpPortion = mayorProps(regionprops(portion, 'all'));
+    rpPortion = mayorProps(regionprops(portion, 'Area', 'ConvexArea', 'Orientation'));
     
-    disp(['Area: ', num2str(rpPortion.Area)]);
-    disp(['ConvexArea: ', num2str(rpPortion.ConvexArea)]);
-    disp(['Area/ConvexArea: ', num2str(rpPortion.Area/rpPortion.ConvexArea)]);
-    disp(['Eccentrecity: ', num2str(rpPortion.Eccentricity)]);
-    
-    figure(1); imshow(portion);
     i = i+1;
+    
+%     disp(['Area: ', num2str(rpPortion.Area)]);
+%     disp(['ConvexArea: ', num2str(rpPortion.ConvexArea)]);
+%     disp(['Area/ConvexArea: ', num2str(rpPortion.Area/rpPortion.ConvexArea)]);
+%     disp(['Eccentrecity: ', num2str(rpPortion.Eccentricity)]);
+%     
+%     figure(1); imshow(portion);
+
 end
 
 angTallo = rpPortion.Orientation;
-sideRotated = imrotate(side, -angTallo);
-figure(1); imshow(sideRotated);
-imgRotated = imrotate(f, firstAng-angTallo);
-figure(2); imshow(imgRotated);
+% sideRotated = imrotate(side, -angTallo);
+% figure(1); imshow(sideRotated);
+% imgRotated = imrotate(f, firstAng-angTallo);
+% figure(2); imshow(imgRotated);
 
 d = firstAng-angTallo;

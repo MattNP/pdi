@@ -1,19 +1,18 @@
 function [l,col] = largoTallo(f)
 
-propImage = regionprops(f,'all');
+propImage = regionprops(f, 'Extrema');
 extremaImage = propImage.Extrema;
 
 [fil,col] = size(f);
 vec = zeros(1,col);
 for i=1: col
-   for j =1: fil
+   for j = 1 : fil
        if (f(j,i) == 1)
            vec(i) = vec(i)+1;
        end
    end
 end
 
-subplot 133; plot(vec);
 [m, n] = size(vec);
 for i = 1 : n
     if vec(i) >= 50
@@ -34,7 +33,6 @@ else
     x2 = extremaImage(3,1);
     y2 = (extremaImage(3,2)+extremaImage(4,2))/2;
 end
-talloBase = pdist([x1,y1;x2,y2]);
 
-l = talloBase;
+l = pdist([x1,y1;x2,y2]);
 col = i;
