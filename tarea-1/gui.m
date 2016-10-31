@@ -426,13 +426,13 @@ axes(handles.axes1);
 set(handles.text8,'String','Terminado');                                    %Cambiamos el valor del text8 a "Terminado".
 set(handles.text11,'visible','on');                                         %Hacemos visible el text11
 if(contador > 300)                                                          %Si la varible contador es mayor a 300
-    set(handles.text11,'String','FELICIDADES, ERES UN GRAN BAILARÍN');      %Mostramos mensaje en text11
+    set(handles.text11,'String','FELICIDADES, ERES UN GRAN BAILAR�?N');      %Mostramos mensaje en text11
 elseif(contador>200)&&(contador<300)                                        %Si la variable contador está entre 200 y 300
-     set(handles.text11,'String','NADA MAL, PERO PODRÍAS HACERLO MEJOR');   %Mostramos mensaje en text11
+     set(handles.text11,'String','NADA MAL, PERO PODR�?AS HACERLO MEJOR');   %Mostramos mensaje en text11
 elseif(contador>50)&&(contador<200)                                         %Si la variable contador esta entre 50 y 200
     set(handles.text11,'String','CREO QUE PUDISTE HACERLO MEJOR');          %Mostramos mensaje en text11    
 elseif(contador<50)                                                         %Si la variable contador es menor  a 50    
-    set(handles.text11,'String','¿REALMENTE ERA TAN DIFÍCIL?');             %Mostramos mensaje en text11
+    set(handles.text11,'String','¿REALMENTE ERA TAN DIF�?CIL?');             %Mostramos mensaje en text11
 end                                                                         %End correspondiente al if
 
 pause(3);                               %Creamos un pause de 3 segundos

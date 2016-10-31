@@ -25,44 +25,39 @@ if cap==1                   % --- Si la imagen no tiene colores
 end
 
 % --- Componentes RGB
-
 a1 = a;                 % --- Se crea una copia de la imagen
 a1 = normaliza(a1);     % --- Se normaliza la imagen
 a1 = w2linea(a1);       % --- Se pasa de tres capas a una línea de una capa
 
 % --- Componentes HSV
-
 a2 = rgb2hsv(a);        % --- Se hace el cambio de espacio de color
 a2 = normaliza(a2);     % --- Se normaliza la imagen
 a2 = w2linea(a2);       % --- Se pasa de tres capas a una línea de una capa
 
 % --- Componentes LAB
-
-cform = makecform('srgb2lab');      % --- Se crea un cform para realizar el cambio de espacio de color
-a3 = applycform(a,cform);           % --- Se hace el cambio de espacio de color
-lab = a3;                           % --- Se guarda el espacio de color para un uso posterior
-a3 = normaliza(a3);                 % --- Se normaliza la imagen
-a3 = w2linea(a3);                   % --- Se pasa de tres capas a una línea de una capa
+cform = makecform('srgb2lab');
+a3 = applycform(a,cform);   % --- Se hace el cambio de espacio de color
+lab = a3;
+a3 = normaliza(a3);         % --- Se normaliza la imagen
+a3 = w2linea(a3);           % --- Se pasa de tres capas a una línea de una capa
 
 % --- Componentes CMYK
-
-cform = makecform('srgb2cmyk');     % --- Se crea un cform para realizar el cambio de espacio de color
+cform = makecform('srgb2cmyk');     
 a4 = applycform(a,cform);           % --- Se hace el cambio de espacio de color
 a4 = normaliza(a4);                 % --- Se normaliza la imagen
-a4 = a4(:,:,1:3);                   % --- Se obtienen las componentes CMY
-y = a4(:,:,3);                      % --- Se obtiene la componente Y (amarillo) para retornarla posteriormente
+a4 = a4(:,:,1:3);
+y = a4(:,:,3);
 a4 = w2linea(a4);                   % --- Se pasa de tres capas a una línea de una capa
 
 % --- Componentes LCH
-
-cform = makecform('lab2lch');   % --- Se crea un cform para realizar el cambio de espacio de color
+cform = makecform('lab2lch');   
 a5 = applycform(lab,cform);     % --- Se hace el cambio de espacio de color
 a5 = normaliza(a5);             % --- Se normaliza la imagen
 a5 = w2linea(a5);               % --- Se pasa de tres capas a una línea de una capa
 
 % --- Retorna resultados
-
-b = [a1;a2;a3;a4;a5];       % --- Se juntan todas las imágenes en línea y se retorna el resultado
+b = [a1;a2;a3;a4;a5];
 y = normaliza(y);           % --- Se normaliza la imagen
-c = y;                      % --- Se retorna la componente Y
+c = y;
+
 end

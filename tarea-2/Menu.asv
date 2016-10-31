@@ -163,8 +163,8 @@ e = logical(e);                     % Se binariza la imagen
 
 % --- Alineación de la imagen binarizada
 
-propsE = regionprops(e, 'Image', 'BoundingBox');        % Se obtiene el BoundingBox y la imagen dada por este último de la imagen por medio de regionprops                        
-if size(propsE) > 0                                     % Se asegura que la imagen posea al menos una región válida
+propsE = regionprops(e, 'Image', 'BoundingBox'); % Se obtiene el BoundingBox y la imagen dada por este último de la imagen por medio de regionprops                        
+if size(propsE) > 0                                      % Se asegura que la imagen posea al menos una región válida
     
     degrees = alinearEsqueje(propsE.Image);             % Se hace un llamado a la función alinearEsqueje que retorna los grados para alinear la imagen
     f = imrotate(e, degrees);                           % Se rota la imagen en los grados indicados por la función alinearEsqueje
@@ -243,14 +243,8 @@ distMilimeters = maxDist * fConv;                           % Se convierte la di
 
 % --- Cálculo de distancia a primera hoja
 
-[fil,col] = size(fEsqueje);             % --- Se halla el tamaño de la imagen
-for colHoja=1: col                      % --- Se recorren las columnas
-    if sum(fEsqueje(:,colHoja)) >= 50	% --- Si la suma de los valores de la columna es mayor a 50
-        break;                          % --- No continúa recorriendo la imagen
-    end                                     
-end
-
-lTalloHojaMM = colHoja * fConv;     % Se convierte la distancia a mm
+[lTalloHoja, colHoja] = largoTallo(fEsqueje);	% Se obtiene la distancia a la primera hoja y la columna donde se encuentra de la función largoTallo        
+lTalloHojaMM = lTalloHoja * fConv;              % Se convierte la distancia a mm
 
 gEsqueje(:,colHoja:colHoja+5,1) = 255;          % En la imagen rotada se hace una línea vertical roja que indica el nacimiento de la primera hoja
 
