@@ -1,21 +1,3 @@
-%--------------------------------------------------------------------------
-%------- TRABAJO 2 --------------------------------------------------------
-%------- Clasificaci髇 de esquejes ----------------------------------------
-%------- Por: Mateo Nore馻 Pino    mateo.norena@udea.edu.co ---------------
-%-------      Estudiante Ingenier韆 de Sistemas  --------------------------
-%-------      CC 1017221148, Wpp 3117597936 -------------------------------
-%------------ John Edisson Tapias Zarrazola    jedisson.tapias@udea.edu.co 
-%-------      Profesor Facultad de Ingenieria BLQ 21-409  -----------------
-%-------      Estudiante Ingenier韆 de Sistemas  --------------------------
-%-------      CC 1152205006, Wpp xxxxxxxxxx -------------------------------
-%------- Curso B谩sico de Procesamiento de Im谩genes y Visi贸n Artificial--
-%------- V1 Octubre de 2016------------------------------------------------
-%--------------------------------------------------------------------------
-
-%--------------------------------------------------------------------------
-%--1. Inicializamos el sistema --------------------------------------------
-%--------------------------------------------------------------------------
-
 function varargout = Menu(varargin)
 clc;
 music = audioread('resources/electrical.mp3');
@@ -46,25 +28,23 @@ sound(music);
 % Last Modified by GUIDE v2.5 30-Oct-2016 16:22:55
 
 % Begin initialization code - DO NOT EDIT
-gui_Singleton = 1;                                              % Declaramos un objeto Singleton para manejar la interfaz g?afica
-gui_State = struct('gui_Name',       mfilename, ...             % Declaramos una estructura con el estado de la interfaz,
-                   'gui_Singleton',  gui_Singleton, ...         % Env铆amos como par谩metros de la estructura cada uno 
-                   'gui_OpeningFcn', @Menu_OpeningFcn, ...      % de los m茅todos y funciones que van a controlar la
-                   'gui_OutputFcn',  @Menu_OutputFcn, ...       % funcionalidad de la interfaz g?afica.
-                   'gui_LayoutFcn',  [] , ...                   % La estructura creada se compone de seis elementos,
-                   'gui_Callback',   []);                       % autogenerados por MATLAB.
-if nargin && ischar(varargin{1})                                % Verificamos que la variable de entrada traiga consigo una funci贸n
-    gui_State.gui_Callback = str2func(varargin{1});             % Si la variable de entrada trae una funci贸n, reemplazamos la funci贸n gui_Callback por defecto
+gui_Singleton = 1;
+gui_State = struct('gui_Name',       mfilename, ...
+                   'gui_Singleton',  gui_Singleton, ...
+                   'gui_OpeningFcn', @Menu_OpeningFcn, ...
+                   'gui_OutputFcn',  @Menu_OutputFcn, ...
+                   'gui_LayoutFcn',  [] , ...
+                   'gui_Callback',   []);
+if nargin && ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
 end
 
-if nargout                                                      % Verificamos si se espera un argumento de salida
-    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});   % Verificamos si se espera un argumento de salida
+if nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
 else
-    gui_mainfcn(gui_State, varargin{:});                        % Si no se espera argumento, simplemente llamamos la funcion principal sin almacenar su resultado
+    gui_mainfcn(gui_State, varargin{:});
 end
-% --- Fin del c贸digo de inicializaci贸n.
-
-% --- C贸digo ejecutado antes de abrir la interfaz gr谩fica.
+% End initialization code - DO NOT EDIT
 
 % --- Executes just before Menu is made visible.
 function Menu_OpeningFcn(hObject, eventdata, handles, varargin)
@@ -74,40 +54,28 @@ function Menu_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to Menu (see VARARGIN)
 
+% Choose default command line output for Menu
+handles.output = hObject;
 
-handles.output = hObject;                   % Seleccionamos la salida por l韓ea de comandos por defecto en Menu
-
-guidata(hObject, handles);                  % Actualizamos la estructura de los manejadores
-
-% --- Mostramos el fondo de la aplicaci髇.
-
-ha = axes('units','normalized', ...         % Obtenemos la vista principal como un axes
-            'position',[0 0 1 1]);          % Se obtiene en unidades normalizadas y en la posici髇 superior izquierda
-uistack(ha,'bottom');                       % Ubicamos el fondo hacia la parte de atr醩
-I=imread('resources/background.jpg');       % Se lee la imagen de fondo
-hi = imagesc(I);                            % Se ubica la imagen en el fondo
-colormap gray                               % Se selecciona el color principal
-
-% --- Ocultamos la visibilidad de las im醙enes y deshabilitamos los botones.
-
-set(ha,'handlevisibility','off', ...        % Se hace invisible el eje del fondo
-            'visible','off');   
-set(handles.axes_original,'visible','off'); % Se hace invisible el eje de la imagen original
-set(handles.axes_aligned,'visible','off');  % Se hace invisible el eje de la imagen alineada
-set(handles.btn_align,'enable','off');      % Se deshabilita el bot髇 para alinear
-set(handles.btn_classify,'enable','off');   % Se deshabilita el bot髇 para clasificar
+% Update handles structure
+guidata(hObject, handles);
+ha = axes('units','normalized', ...
+            'position',[0 0 1 1]);
+% El fondo hacia la parte inferior
+uistack(ha,'bottom');
+I=imread('resources/background.jpg');
+hi = imagesc(I);
+colormap gray
+% Ejes invisibles
+set(ha,'handlevisibility','off', ...
+            'visible','off');
+set(handles.axes_original,'visible','off');
+set(handles.axes_aligned,'visible','off');
+set(handles.btn_align,'enable','off');
+set(handles.btn_classify,'enable','off');
 
 % UIWAIT makes Menu wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
-
-
-%--------------------------------------------------------------------------
-%--2. Funcionalidad de los botones ----------------------------------------
-%--------------------------------------------------------------------------
-
-%--------------------------------------------------------------------------
-%--2.1. Bot髇 "Cargar esqueje" --------------------------------------------
-%--------------------------------------------------------------------------
 
 % --- Executes on button press in btn_load.
 function btn_load_Callback(hObject, eventdata, handles)
@@ -115,30 +83,25 @@ function btn_load_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% --- Se carga la imagen a analizar
+%Load images
 
-global img                                                      % Se define una variable global para tener la imagen disponible en todo el programa
-[filename1, filepath1] = uigetfile({'*.TIFF','All Files'},...   % Se abre una interfaz del explorador de archivos para seleccionar la imagen
-  'Seleccione el esqueje a analizar');                          % El programa acepta archivos .TIFF
-if filename1~=0                                                 % Si se selecciona un archivo
-	if strcmp(filename1(end-3:end),'TIFF')                      % Se verifica que el archivo sea .TIFF
-		img = imread([filepath1 filename1]);                    % Se lee la imagen y se guarda globalmente
+global img
+[filename1, filepath1] = uigetfile({'*.TIFF','All Files'},...
+  'Seleccione el esqueje a analizar');
+if filename1~=0
+	if strcmp(filename1(end-3:end),'TIFF')
+		img = imread([filepath1 filename1]);
 	else
-		errordlg('El archivo debe ser .TIFF');                  % En caso de que la imagen no sea .TIFF se informa al usuario
+		errordlg('El archivo debe ser .TIFF');
 		return;
     end
 
-    % --- Se muestra la imagen y se habilita el bot髇 "Alinear esqueje"
-    
-	set(handles.axes_original,'visible','on');                  % Se hace visible el axes de la imagen original
-	imshow(img, 'parent',handles.axes_original);                % Se muestra la imagen en el axes respectivo
-    set(handles.btn_align,'enable','on');                       % Se habilita el bot髇 "Alinear esqueje"
-    set(handles.btn_classify,'enable','off');                   % Se deshabilita el bot髇 "Clasificar esqueje"
+	% Graficar la imagen
+	set(handles.axes_original,'visible','on');
+	imshow(img, 'parent',handles.axes_original);
+    set(handles.btn_align,'enable','on');
+    set(handles.btn_classify,'enable','off');
 end
-
-%--------------------------------------------------------------------------
-%--2.2. Bot髇 "Alinear esqueje" -------------------------------------------
-%--------------------------------------------------------------------------
 
 % --- Executes on button press in btn_align.
 function btn_align_Callback(hObject, eventdata, handles)
@@ -146,66 +109,57 @@ function btn_align_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global img fEsqueje gEsqueje        % Se definen las variables globales que se van a usar durante la ejecuci髇 del resto del programa
+global img fEsqueje gEsqueje
 
-% --- Preprocesado de la imagen
+% Preprocesado de la imagen
+[b,c] = componentes_color(img);
+d = c;
+em = 160;
+d(d > em) = 255; 
+d(d < 255) = 0;
+[e] = elMayor(d);
 
-[b,c] = componentes_color(img);     % Se obtienen los componentes de color de la imagen     
-d = c;                              % Se toma el componente de color Y del espacio CMYK
-em = 160;                           % Se establece un umbral simple
-d(d > em) = 255;                    % Los valores sobre el umbral quedan en la imagen y pasan a ser blancos
-d(d < 255) = 0;                     % Los valores bajo el umbral pasan a ser negros
-[e] = elMayor(d);                   % Se limpia la imagen escogiendo el 醨ea mayor
+ee = strel ('square',6);
+e = imclose(e,ee);
+e = logical(e);
 
-ee = strel ('square',6);            % Se establece un elemento estructurante de tipo cuatro de tama駉 6
-e = imclose(e,ee);                  % Se le hace el proceso de cerrado a la imagen
-e = logical(e);                     % Se binariza la imagen
+props = regionprops(e, 'Area');
+disp(size(props));
+if size(props) > 0
+    degrees = alinearEsqueje(e);
+    f = imrotate(e, degrees);
+    propsE = regionprops(e, 'BoundingBox');
+    propsF = regionprops(f, 'BoundingBox', 'Image');
+    fEsqueje = propsF.Image;
+    g = imrotate(img, degrees);
+    y1 = propsF.BoundingBox(1);
+    y2 = y1 + propsF.BoundingBox(3);
+    x1 = propsF.BoundingBox(2);
+    x2 = x1 + propsF.BoundingBox(4);
+    gEsqueje = g(x1:x2-1,y1:y2-1,:);
+    y1 = propsE.BoundingBox(1);
+    y2 = y1 + propsE.BoundingBox(3);
+    x1 = propsE.BoundingBox(2);
+    x2 = x1 + propsE.BoundingBox(4);
+    imgEsqueje = img(x1:x2-1,y1:y2-1,:);
+    
+    [m, n] = size(fEsqueje);
+    [o, p] = size(gEsqueje);
+    disp(['Size fEsqueje: ', num2str(m), ' x ', num2str(n)]);
+    disp(['Size gEsqueje: ', num2str(o), ' x ', num2str(p)]);
 
-% --- Alineaci髇 de la imagen binarizada
-
-propsE = regionprops(e, 'Image', 'BoundingBox');        % Se obtiene el BoundingBox y la imagen dada por este 鷏timo de la imagen por medio de regionprops                        
-if size(propsE) > 0                                     % Se asegura que la imagen posea al menos una regi髇 v醠ida
+    d = fEsqueje;
+    d = [d,d,d];
+    [fil,col,cap] = size(gEsqueje);
+    d = reshape(d,[fil,col,cap]);
+    gEsqueje(d==0)=0;
+    set(handles.axes_original,'visible','on');
+    imshow(imgEsqueje, 'parent', handles.axes_original);
+    set(handles.axes_aligned,'visible','on');
+    imshow(gEsqueje, 'parent', handles.axes_aligned);
     
-    degrees = alinearEsqueje(propsE.Image);             % Se hace un llamado a la funci髇 alinearEsqueje que retorna los grados para alinear la imagen
-    f = imrotate(e, degrees);                           % Se rota la imagen en los grados indicados por la funci髇 alinearEsqueje
-    
-    % --- B鷖queda del esqueje en la imagen original y en la imagen
-    % binarizada rotada
-    
-    propsF = regionprops(f, 'BoundingBox', 'Image');    % Se obtiene el BoundingBox y la imagen dada por este de la imagen rotada
-    fEsqueje = propsF.Image;                            % Se guarda en una variable global la imagen del esqueje rotado
-    g = imrotate(img, degrees);                         % Se rota la imagen original los grados dados por alinearEsqueje
-    y1 = propsF.BoundingBox(1);                         % Se establece la ubicaci髇 del esqueje utilizando cuatro puntos (X1, X2, Y1, Y2)
-    y2 = y1 + propsF.BoundingBox(3);                    % El punto y2 viene dado por la suma del punto y1 y el largo del BoundingBox
-    x1 = propsF.BoundingBox(2);                         % Se ubica el punto x1 de la imagen binarizada
-    x2 = x1 + propsF.BoundingBox(4);                    % El punto x2 viene dado por la suma del punto x1 y el ancho del BoundingBox
-    gEsqueje = g(x1:x2-1,y1:y2-1,:);                    % Se busca el esqueje en la imagen original rotada
-    y1 = propsE.BoundingBox(1);                         % Se establece la ubicaci髇 del esqueje en la imagen original utilizando cuatro puntos (X1, X2, Y1, Y2)
-    y2 = y1 + propsE.BoundingBox(3);                    % El punto y2 viene dado por la suma del punto y1 y el largo del BoundingBox
-    x1 = propsE.BoundingBox(2);                         % Se ubica el punto x1 de la imagen binarizada
-    x2 = x1 + propsE.BoundingBox(4);                    % El punto x2 viene dado por la suma del punto x1 y el ancho del BoundingBox
-    imgEsqueje = img(x1:x2-1,y1:y2-1,:);                % Se busca el esqueje en la imagen original
-
-    % --- Se muestran las im醙enes
-    
-    d = fEsqueje;                                       % Se guarda la imagen binarizada rotada en una variable
-    d = [d,d,d];                                        % Se convierte en una imagen de tres capas                                        
-    [fil,col,cap] = size(gEsqueje);                     % Se toma el tama駉 de la imagen original rotada
-    d = reshape(d,[fil,col,cap]);                       % Se lleva la imagen a la forma dada por la imagen original
-    gEsqueje(d==0)=0;                                   % Se hacen negro lo que no hace parte del esqueje
-    
-    imshow(imgEsqueje, 'parent', handles.axes_original);% Se muestra el esqueje de la imagen original
-    set(handles.axes_aligned,'visible','on');           % Se hace visible el axes de la imagen rotada
-    imshow(gEsqueje, 'parent', handles.axes_aligned);   % Se muestra el esqueje rotado
-    
-    set(handles.btn_classify,'enable','on');            % Se habilita el bot髇 "Clasificar esqueje"
-else
-    h = msgbox('No hay un esqueje en la imagen. Seleccione otra imagen', 'Error','error');  % Si no hay una regi髇 v醠ida en la imagen se informa
+    set(handles.btn_classify,'enable','on');
 end
-
-%--------------------------------------------------------------------------
-%--2.3. Bot髇 "Clasificar esqueje" -------------------------------------------
-%--------------------------------------------------------------------------
 
 % --- Executes on button press in btn_classify.
 function btn_classify_Callback(hObject, eventdata, handles)
@@ -214,76 +168,60 @@ function btn_classify_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 %y = str2num(get(handles.txt_maxLarge,'string'));
 
-global fEsqueje gEsqueje                                    % Se obtienen las variables globales asignadas anteriormente
+global fEsqueje gEsqueje
 
-largo = str2double(get(handles.txt_maxLarge,'String'));     % Se obtiene el valor del campo "Esqueje largo"
-corto = str2double(get(handles.txt_minShort,'String'));     % Se obtiene el valor del campo "Esqueje corto"  
-hoja = str2double(get(handles.txt_distance,'String'));      % Se obtiene el valor del campo "Distancia a primera hoja"
+largo = str2double(get(handles.txt_maxLarge,'String'));
+corto = str2double(get(handles.txt_minShort,'String'));
+hoja = str2double(get(handles.txt_distance,'String'));
 
-propImage = regionprops(fEsqueje, 'Extrema', 'Area');       % Se obtienen el 醨ea y los valores extremos del esqueje rotado
-extremaImage = propImage.Extrema;                           % Se guardan en una variable los valores extremos
+propImage = regionprops(fEsqueje, 'Extrema', 'Area');
+disp(['Length regionProps: ', num2str(size(propImage))]);
+extremaImage = propImage.Extrema;
 
-% --- Calculo del factor de conversion
+% Calculo del factor de conversion
 
 palitoPx = 1148;                % El palito mide 1145 en pixeles
-palitoMm = 115;                 % El palito mide 11.5 cm o 115 mm
+palitoMm = 115;                 % El palito mide 114511.5 cm
 mMxPx= palitoMm / palitoPx;     % C醠culo de mm por px
 zoomCam = 1.19;                 % La foto del palito tiene un zoom 119% 
 fConv = mMxPx * zoomCam;        % El factor queda definido por los mm por px multiplicado por el zoom
 
-% --- C醠culo de longitud m醲ima
+% Hallar maxima distancia
+dists = zeros(1, 4);
+dists(1) = pdist([extremaImage(3,:); extremaImage(7,:)]);
+dists(2) = pdist([extremaImage(3,:); extremaImage(8,:)]);
+dists(3) = pdist([extremaImage(4,:); extremaImage(7,:)]);
+dists(4) = pdist([extremaImage(4,:); extremaImage(8,:)]);
+maxDist = max(dists);
+distMilimeters = maxDist * fConv;
 
-dists = zeros(1, 4);                                        % Se inicializa en ceros un vector para guardar las distancias importantes
-dists(1) = pdist([extremaImage(3,:); extremaImage(7,:)]);   % Distancia del extremo 3 al extremo 7
-dists(2) = pdist([extremaImage(3,:); extremaImage(8,:)]);   % Distancia del extremo 3 al extremo 8
-dists(3) = pdist([extremaImage(4,:); extremaImage(7,:)]);   % Distancia del extremo 4 al extremo 7
-dists(4) = pdist([extremaImage(4,:); extremaImage(8,:)]);   % Distancia del extremo 4 al extremo 8
-maxDist = max(dists);                                       % Se obtiene la distancia mayor
-distMilimeters = maxDist * fConv;                           % Se convierte la distancia a mm
+[lTalloHoja, colHoja] = largoTallo(fEsqueje); 
+lTalloHojaMM = lTalloHoja * fConv;
 
-% --- C醠culo de distancia a primera hoja
+disp(['colHoja = ', num2str(colHoja)]);
 
-[fil,col] = size(fEsqueje);             % --- Se halla el tama駉 de la imagen
-for colHoja=1: col                      % --- Se recorren las columnas
-    if sum(fEsqueje(:,colHoja)) >= 50	% --- Si la suma de los valores de la columna es mayor a 50
-        break;                          % --- No contin鷄 recorriendo la imagen
-    end                                     
-end
+gEsqueje(:,colHoja:colHoja+5,1) = 255;
 
-lTalloHojaMM = colHoja * fConv;     % Se convierte la distancia a mm
+set(handles.axes_aligned,'visible','on');
+imshow(gEsqueje, 'parent', handles.axes_aligned);
 
-gEsqueje(:,colHoja:colHoja+5,1) = 255;          % En la imagen rotada se hace una l韓ea vertical roja que indica el nacimiento de la primera hoja
+area = propImage.Area * fConv^2;
 
-% --- C醠culo del 醨ea del esqueje
-
-area = propImage.Area * fConv^2;    % Se calcula el 醨ea utilizando regionprops y se convierten a mm cuadrados
-
-% --- Clasificaci髇 del esqueje
-
-tEsqueje = 'Ideal';                             % Por defecto el esqueje es ideal
-if distMilimeters > largo*10                    
-    tEsqueje = 'Esqueje largo';                 % El esqueje es m醩 largo que el valor ingresado
+tEsqueje = 'Ideal';
+if distMilimeters > largo*10
+    tEsqueje = 'Esqueje largo';
 else if distMilimeters < corto*10
-        tEsqueje = 'Esqueje corto';             % El esqueje es m醩 corto que el valor ingresado
+        tEsqueje = 'Esqueje corto';
     else if lTalloHojaMM < hoja
-            tEsqueje = 'Esqueje hoja en base';  % El esqueje tiene una hoja en la base
+            tEsqueje = 'Esqueje hoja en base';
         end
     end
 end
 
-% --- Se muestran las im醙enes y los c醠culos obtenidos
-
-imshow(gEsqueje, 'parent', handles.axes_aligned);               % Se muestra la imagen con la l韓ea roja indicando el nacimiento de la hoja            
-
-set(handles.txt_tipoEsqueje,'String', tEsqueje);                % Se muestra la clasificaci髇 del esqueje            
-set(handles.txt_maxLength,'String', num2str(distMilimeters));   % Se muestra la longitud m醲imo del esqueje
-set(handles.txt_lengthFirst,'String', lTalloHojaMM);            % Se muestra la distancia a la primera hoja
-set(handles.txt_area,'String', area);                           % Se muestra el 醨ea del esqueje
-    
-
-%--------------------------------------------------------------------------
-%--3. M閠odos de los componentes de la interfaz gr醘ica -------------------
-%--------------------------------------------------------------------------
+set(handles.txt_tipoEsqueje,'String', tEsqueje);
+set(handles.txt_maxLength,'String', num2str(distMilimeters));
+set(handles.txt_lengthFirst,'String', lTalloHojaMM);
+set(handles.txt_area,'String', area);
 
 
 % --- Outputs from this function are returned to the command line.
