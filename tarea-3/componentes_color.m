@@ -12,7 +12,7 @@
 %------- V1 Octubre de 2016------------------------------------------------
 %--------------------------------------------------------------------------
 
-function[b,c] = componentes_color(a)
+function[b,c,d] = componentes_color(a)
 
 % --- Retorna un collage de imágenes en varios espacios de color y una
 % imagen en un componente de un espacio de color
@@ -34,6 +34,8 @@ a1 = w2linea(a1);       % --- Se pasa de tres capas a una línea de una capa
 
 a2 = rgb2hsv(a);        % --- Se hace el cambio de espacio de color
 a2 = normaliza(a2);     % --- Se normaliza la imagen
+h = a2(:,:,1);
+s = a2(:,:,2);
 a2 = w2linea(a2);       % --- Se pasa de tres capas a una línea de una capa
 
 % --- Componentes LAB
@@ -51,6 +53,8 @@ a4 = applycform(a,cform);           % --- Se hace el cambio de espacio de color
 a4 = normaliza(a4);                 % --- Se normaliza la imagen
 a4 = a4(:,:,1:3);                   % --- Se obtienen las componentes CMY
 c = a4(:,:,1);                      % --- Se obtiene la componente Y (amarillo) para retornarla posteriormente
+y = a4(:,:,3);
+m = a4(:,:,2);
 a4 = w2linea(a4);                   % --- Se pasa de tres capas a una línea de una capa
 
 % --- Componentes LCH
@@ -64,11 +68,14 @@ a5 = w2linea(a5);               % --- Se pasa de tres capas a una línea de una c
 
 a6 = rgb2ycbcr(a);        % --- Se hace el cambio de espacio de color
 a6 = normaliza(a6);     % --- Se normaliza la imagen
+y = a6(:,:,1);
 a6 = w2linea(a6);       % --- Se pasa de tres capas a una línea de una capa
 
 % --- Retorna resultados
 
 b = [a1;a2;a3;a4;a5;a6];       % --- Se juntan todas las imágenes en línea y se retorna el resultado
-c = normaliza(c);           % --- Se normaliza la imagen
-c = c;                      % --- Se retorna la componente Y
+% h = normaliza(h);           % --- Se normaliza la imagen
+% s = normaliza(s);
+c = h;                      % --- Se retorna la componente Y
+d = s;
 end
