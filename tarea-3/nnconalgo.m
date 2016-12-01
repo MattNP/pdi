@@ -6,7 +6,8 @@
 %
 %   trafficInputs - input data.
 %   trafficTargets - target data.
-
+clear all; close all; clc;
+load('trafficData.mat');
 x = trafficInputs;
 t = trafficTargets;
 
@@ -47,4 +48,6 @@ view(net)
 %figure, ploterrhist(e)
 %figure, plotconfusion(t,y)
 %figure, plotroc(t,y)
+
+save('red.mat');
 
