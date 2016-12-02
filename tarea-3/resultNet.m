@@ -1,37 +1,37 @@
-clear all; close all; clc;
-load('netTraffic.mat');
+%--------------------------------------------------------------------------
+%------- TRABAJO 3 --------------------------------------------------------
+%------- Clasificaciï¿½ de seÃ±ales de trÃ¡nsito --------------------------
+%------- Por: Mateo Noreï¿½ Pino    mateo.norena@udea.edu.co --------------
+%-------      Estudiante Ingenierï¿½ de Sistemas  -------------------------
+%-------      CC 1017221148, Wpp 3117597936 -------------------------------
+%------------ John Edisson Tapias Zarrazola    jedisson.tapias@udea.edu.co 
+%-------        -----------------------------------------------------------
+%-------      Estudiante Ingenierï¿½ de Sistemas  -------------------------
+%-------      CC 1152205006, Wpp xxxxxxxxxx -------------------------------
+%------- Curso BÃ¡sico de Procesamiento de ImÃ¡genes y VisiÃ³n Artificial--
+%------- V1 Diciembre de 2016 ---------------------------------------------
+%--------------------------------------------------------------------------
 
-tM = 30;
+% Función que obtiene la imagen de una señal de tránsito para su identificación
+% y devuelve el índice de la neurona de salida activada, que resulta ser la
+% clase a la cual pertenece
 
-x = zeros(tM,1);
+function ind = resultNet(img)
 
-a = imread(strcat('traffic_signals/1/00029.ppm'));
-a = imresize(a, [tM tM]);
-%[c,hImg,sImg] = componentes_color(a);
-         
-         
-%         bImg(bImg < mean(bImg(:))) = 255; 
-%         bImg(bImg < 77) = 255; 
-%         bImg(bImg < 255) = 0;
-bImg = rgb2gray(a);        
-%         level=graythresh(bImg);
-%         bImg=im2bw(a,level);
-        
-r = a(:,:,1);
-g = a(:,:,2);
-b = a(:,:,3);
-mR = (1/256)* mean(r(:));
-mG = (1/256)* mean(g(:));
-mB = (1/256)* mean(b(:));
-x(1,1) = mR;
-x(2,1) = mG;
-x(3,1) = mB;
-t = mean(bImg(:));
-for k=1:tM
-    vh = mean(bImg(k,:)>t);
-    hh = mean(bImg(:,k)>t);
-            x(k+3,1) = vh;
-            x(k+tM+3,1) = hh;
-        end
-        
-y = net(x)
+%--------------------------------------------------------------------------
+%--1. Cargando de la red neuronal -----------------------------------------
+%--------------------------------------------------------------------------
+load('netRoadSigns2.mat');   % Se carga la red neuronal que guardó los datos anteriormente
+
+%--------------------------------------------------------------------------
+%--2. Obteniendo las características de la señal ingresada  ---------------
+%--------------------------------------------------------------------------
+x = extractFeatures(img)
+
+%--------------------------------------------------------------------------
+%--3. Obteniendo la señal clasificada  ------------------------------------
+%--------------------------------------------------------------------------
+
+yArr = net(x)
+
+[y, ind] = max(yArr);

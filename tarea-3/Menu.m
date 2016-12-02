@@ -1,12 +1,12 @@
 %--------------------------------------------------------------------------
-%------- TRABAJO 2 --------------------------------------------------------
-%------- Clasificaciï¿½ de seÃ±ales de trÃ¡nsito ------------------------------
-%------- Por: Mateo Noreï¿½ Pino    mateo.norena@udea.edu.co ---------------
-%-------      Estudiante Ingenierï¿½ de Sistemas  --------------------------
+%------- TRABAJO 3 --------------------------------------------------------
+%------- Clasificaciï¿½ de seÃ±ales de trÃ¡nsito --------------------------
+%------- Por: Mateo Noreï¿½ Pino    mateo.norena@udea.edu.co --------------
+%-------      Estudiante Ingenierï¿½ de Sistemas  -------------------------
 %-------      CC 1017221148, Wpp 3117597936 -------------------------------
 %------------ John Edisson Tapias Zarrazola    jedisson.tapias@udea.edu.co 
-%-------      Profesor Facultad de Ingenieria BLQ 21-409  -----------------
-%-------      Estudiante Ingenierï¿½ de Sistemas  --------------------------
+%-------        -----------------------------------------------------------
+%-------      Estudiante Ingenierï¿½ de Sistemas  -------------------------
 %-------      CC 1152205006, Wpp xxxxxxxxxx -------------------------------
 %------- Curso BÃ¡sico de Procesamiento de ImÃ¡genes y VisiÃ³n Artificial--
 %------- V1 Diciembre de 2016 ---------------------------------------------
@@ -18,8 +18,6 @@
 
 function varargout = Menu(varargin)
 clc;
-% music = audioread('resources/electrical.mp3');
-% sound(music);
 % MENU MATLAB code for Menu.fig
 %      MENU, by itself, creates a new MENU or raises the existing
 %      singleton*.
@@ -85,7 +83,7 @@ ha = axes('units','normalized', ...         % Obtenemos la vista principal como 
             'position',[0 0 1 1]);          % Se obtiene en unidades normalizadas y en la posiciï¿½ superior izquierda
 uistack(ha,'bottom');                       % Ubicamos el fondo hacia la parte de atrï¿½
 I=imread('resources/background.jpg');       % Se lee la imagen de fondo
-hi = imagesc(I);                            % Se ubica la imagen en el fondo
+imagesc(I);                                 % Se ubica la imagen en el fondo
 colormap gray                               % Se selecciona el color principal
 
 % --- Ocultamos la visibilidad de las imï¿½enes y deshabilitamos los botones.
@@ -105,7 +103,7 @@ set(handles.btn_classify,'enable','off');   % Se deshabilita el botï¿½ para clas
 %--------------------------------------------------------------------------
 
 %--------------------------------------------------------------------------
-%--2.1. Botï¿½ "Cargar esqueje" --------------------------------------------
+%--2.1. Botï¿½ "Cargar señal" --------------------------------------------
 %--------------------------------------------------------------------------
 
 % --- Executes on button press in btn_load.
@@ -116,18 +114,18 @@ function btn_load_Callback(hObject, eventdata, handles)
 
 % --- Se carga la imagen a analizar
 
-% global img                                                      % Se define una variable global para tener la imagen disponible en todo el programa
+global img                                                      % Se define una variable global para tener la imagen disponible en todo el programa
 [filename1, filepath1] = uigetfile({'*.ppm','All Files'},...   % Se abre una interfaz del explorador de archivos para seleccionar la imagen
-  'Seleccione la seÃ±al a clasificar');                          % El programa acepta archivos .jpg, .png, 
+  'Seleccione la seÃ±al a clasificar');                          % El programa acepta archivos .ppm 
 if filename1~=0                                                 % Si se selecciona un archivo
-	if strcmp(filename1(end-2:end),{'ppm'})% Se verifica que el archivo sea .TIFF
+	if strcmp(filename1(end-2:end),{'ppm'})                     % Se verifica que el archivo sea .ppm
 		img = imread([filepath1 filename1]);                    % Se lee la imagen y se guarda globalmente
     else
-		errordlg('La imagen debe estar en formato .ppm, .jpg, .bmp o .png');                  % En caso de que la imagen no sea .TIFF se informa al usuario
+		errordlg('La imagen debe estar en formato .ppm');      % En caso de que la imagen no sea .ppm se informa al usuario
 		return;
     end
 
-    % --- Se muestra la imagen y se habilita el botï¿½ "Alinear esqueje"
+    % --- Se muestra la imagen y se habilita el botï¿½ "Clasificar señal"
     
 	set(handles.axes_loaded,'visible','on');                  % Se hace visible el axes de la imagen original
 	imshow(img, 'parent',handles.axes_loaded);                % Se muestra la imagen en el axes respectivo
@@ -144,13 +142,16 @@ function btn_classify_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% global fEsqueje gEsqueje                                    % Se obtienen las variables globales asignadas anteriormente
-% 
-% 
-% % --- Se muestra la seÃ±al identificada
-% 
-% imshow(gEsqueje, 'parent', handles.axes_identified);               % Se muestra la imagen con la lï¿½ea roja indicando el nacimiento de la hoja            
-% 
+ global img             % Se lee la imagen de la señal que se declaro globalmente                        
+ ind = resultNet(img);  % Se obtiene el índice de la señal identificada
+ 
+ signI = imread(strcat('resources/road_signs/', num2str(ind), '.png')); % Se lee la imagen que se mostrará como la señal identificada
+
+% --- Se muestra la seÃ±al identificada
+
+set(handles.axes_loaded,'visible','on');            % Se habilita el axes donde se mostrará la imagen
+imshow(signI, 'parent', handles.axes_identified);   % Se muestra la señal identificada a la derecha de la pantalla            
+
     
 
 %--------------------------------------------------------------------------
